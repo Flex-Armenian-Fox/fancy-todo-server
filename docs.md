@@ -1,56 +1,362 @@
-**Title**
-----
-  <_Additional information about your API call. Try to use verbs that match both request type (fetching vs modifying) and plurality (one vs multiple)._>
+# Fancy Todos API Documentation
+
+## Add Todo
+Add new todo to Fancy Todo
 
 * **URL**
 
-  <_The URL Structure (path only, no root url)_>
+  `/todos`
 
 * **Method:**
   
-  <_The request type_>
-
-  `GET` | `POST` | `DELETE` | `PUT`
+  `POST`
   
-*  **URL Params**
+* **URL Params**: none
 
-   <_If URL params exist, specify them in accordance with name mentioned in URL section. Separate into optional and required. Document data constraints._> 
+* **Data Params**: none
 
-   **Required:**
- 
-   `id=[integer]`
-
-   **Optional:**
- 
-   `photo_id=[alphanumeric]`
-
-* **Data Params**
-
-  <_If making a post request, what should the body payload look like? URL Params rules apply here too._>
+* **Request Body**
+    ```json
+      {
+        "title": "<todo title>",
+        "description": "<todo description>",
+        "status": "<todo status: done/undone>",
+        "due_date": "<todo due date, format: YYYY-MM-DD>"
+      }
+      ```
 
 * **Success Response:**
-  
-  <_What should the status code be on success and is there any returned data? This is useful when people need to to know what their callbacks should expect!_>
 
-  * **Code:** 200 <br />
-    **Content:** `{ id : 12 }`
+  * **Code:** 201 <br />
+    **Content:**
+    ```json
+    {
+      "message": created
+      "data":
+        {
+          "id": "<id number>",
+          "title": "<todo title>",
+          "description": "<todo description>",
+          "status": "<todo status: done/undone>",
+          "due_date": "<todo due date>",
+          "createdAt": "2021-05-24T15:01:21.735Z",
+          "updatedAt": "2021-05-24T15:01:21.735Z"
+        }
+    },
+    ```
  
 * **Error Response:**
 
-  <_Most endpoints will have many ways they can fail. From unauthorized access, to wrongful parameters etc. All of those should be liste d here. It might seem repetitive, but it helps prevent assumptions from being made where they should be._>
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{
+  "message": [
+    "Due date cannot be before today"
+  ]}`
 
-  * **Code:** 401 UNAUTHORIZED <br />
-    **Content:** `{ error : "Log in" }`
+     OR
 
-  OR
-
-  * **Code:** 422 UNPROCESSABLE ENTRY <br />
-    **Content:** `{ error : "Email Invalid" }`
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** Error stack
 
 * **Sample Call:**
 
-  <_Just a sample call to your endpoint in a runnable format ($.ajax call or a curl request) - this makes life easier and more predictable._> 
+  Request body:
+  ```json
+  {
+    "title": "REST API",
+    "description": "learning about REST API",
+    "status": "undone",
+    "due_date": "2021-05-26"
+  }
+  ```
 
-* **Notes:**
+  Response:
+  ```json
+  {
+    "id": 1,
+    "title": "REST API",
+    "description": "learning about REST API",
+    "status": "undone",
+    "due_date": "2021-05-26T00:00:00.000Z",
+    "createdAt": "2021-05-24T15:01:21.735Z",
+    "updatedAt": "2021-05-24T15:01:21.735Z"
+  }
+  ```
 
-  <_This is where all uncertainties, commentary, discussion etc. can go. I recommend timestamping and identifying oneself when leaving comments here._> 
+* **Notes:** none
+
+---
+
+## Show All Todos
+Show all todos in Fancy Todo
+
+* **URL**
+
+  `/todos`
+
+* **Method:**
+  
+  `GET`
+  
+* **URL Params**: none
+
+* **Data Params**: none
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:**
+    ```json
+    [
+      {
+        "id": "<id number>",
+        "title": "<todo title>",
+        "description": "<todo description>",
+        "status": "<todo status: done/undone>",
+        "due_date": "<todo due date>",
+        "createdAt": "2021-05-24T15:01:21.735Z",
+        "updatedAt": "2021-05-24T15:01:21.735Z"
+      },
+      {
+        "id": "<id number>",
+        "title": "<todo title>",
+        "description": "<todo description>",
+        "status": "<todo status: done/undone>",
+        "due_date": "<todo due date>",
+        "createdAt": "2021-05-24T15:01:21.735Z",
+        "updatedAt": "2021-05-24T15:01:21.735Z"
+      }
+    ]
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** Error stack
+
+* **Notes:** none
+---
+## Show Todo by ID
+Show todo in Fancy Todo by ID
+
+* **URL**
+
+  `/todos`
+
+* **Method:**
+  
+  `GET`
+  
+* **URL Params**
+
+  `/todos/:id`
+
+  **Required:**
+  
+  `id=[integer]`
+
+* **Data Params**: none
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:**
+    ```json
+      {
+        "id": "<id number>",
+        "title": "<todo title>",
+        "description": "<todo description>",
+        "status": "<todo status: done/undone>",
+        "due_date": "<todo due date>",
+        "createdAt": "2021-05-24T15:01:21.735Z",
+        "updatedAt": "2021-05-24T15:01:21.735Z"
+      }
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 404 NOT FOUND <br />
+    **Content:** `{
+  "message": "Not Found"
+}`
+
+* **Notes:** none
+---
+## Update Todo
+Update all todo field in Fancy Todo
+
+* **URL**
+
+  `/todos`
+
+* **Method:**
+  
+  `PUT`
+  
+* **URL Params**
+
+  `/todos/:id`
+
+  **Required:**
+  
+  `id=[integer]`
+
+* **Data Params**: none
+
+* **Request Body**
+    ```json
+      {
+        "title": "<todo title>",
+        "description": "<todo description>",
+        "status": "<todo status: done/undone>",
+        "due_date": "<todo due date, format: YYYY-MM-DD>"
+      }
+      ```
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:**
+    ```json
+      {
+        "id": "<id number>",
+        "title": "<todo title>",
+        "description": "<todo description>",
+        "status": "<todo status: done/undone>",
+        "due_date": "<todo due date>",
+        "createdAt": "2021-05-24T15:01:21.735Z",
+        "updatedAt": "2021-05-24T15:01:21.735Z"
+      }
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{
+  "message": [
+    "Due date cannot be before today"
+  ]}`
+
+    OR
+
+  * **Code:** 404 NOT FOUND <br />
+    **Content:** `{
+    "message": "Not Found"
+  }`
+
+    OR
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** Error stack
+
+* **Notes:** none
+---
+## Update Todo Status
+Update only todo status field in Fancy Todo
+
+* **URL**
+
+  `/todos`
+
+* **Method:**
+  
+  `PATCH`
+  
+* **URL Params**
+
+  `/todos/:id`
+
+  **Required:**
+  
+  `id=[integer]`
+
+* **Data Params**: none
+
+* **Request Body**
+    ```json
+      {
+        "title": "<todo title>",
+        "description": "<todo description>",
+        "status": "<todo status: done/undone>",
+        "due_date": "<todo due date, format: YYYY-MM-DD>"
+      }
+      ```
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:**
+    ```json
+      {
+        "id": "<id number>",
+        "title": "<todo title>",
+        "description": "<todo description>",
+        "status": "<todo status: done/undone>",
+        "due_date": "<todo due date>",
+        "createdAt": "2021-05-24T15:01:21.735Z",
+        "updatedAt": "2021-05-24T15:01:21.735Z"
+      }
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{
+  "message": [
+    "Due date cannot be before today"
+  ]}`
+
+    OR
+
+  * **Code:** 404 NOT FOUND <br />
+    **Content:** `{
+    "message": "Not Found"
+  }`
+
+    OR
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** Error stack
+
+* **Notes:** none
+---
+## Delete Todo
+Delete todo from Fancy Todo
+
+* **URL**
+
+  `/todos`
+
+* **Method:**
+  
+  `DELETE`
+  
+* **URL Params**
+
+  `/todos/:id`
+
+  **Required:**
+  
+  `id=[integer]`
+
+* **Data Params**: none
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:**
+    `{message: todo deleted}`
+ 
+* **Error Response:**
+
+ * **Code:** 404 NOT FOUND <br />
+    **Content:** `{
+    "message": "Not Found"
+  }`
+
+    OR
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** Error stack
+
+* **Notes:** none

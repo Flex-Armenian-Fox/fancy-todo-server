@@ -275,10 +275,7 @@ Update only todo status field in Fancy Todo
 * **Request Body**
     ```json
       {
-        "title": "<todo title>",
-        "description": "<todo description>",
-        "status": "<todo status: done/undone>",
-        "due_date": "<todo due date, format: YYYY-MM-DD>"
+        "status": "<todo status: done/undone>"
       }
       ```
 
@@ -345,7 +342,21 @@ Delete todo from Fancy Todo
 
   * **Code:** 200 <br />
     **Content:**
-    `{message: todo deleted}`
+    ```json
+    {
+      "message": "todo deleted",
+      "deletedData": 
+      {
+        "id": "<id number>",
+        "title": "<todo title>",
+        "description": "<todo description>",
+        "status": "<todo status: done/undone>",
+        "due_date": "<todo due date>",
+        "createdAt": "2021-05-24T15:01:21.735Z",
+        "updatedAt": "2021-05-24T15:01:21.735Z"
+      }
+    }
+    ```
  
 * **Error Response:**
 

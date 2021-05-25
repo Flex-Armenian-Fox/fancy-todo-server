@@ -59,7 +59,7 @@ class ControllerTodo {
             .then(updated => {
                 if (updated[0] === 0) {
                     throw {
-                        name: 'Nof Found',
+                        name: 'Not Found',
                         message: `Todo with ID ${todoId} does not exist`
                     }
                 } else {
@@ -67,14 +67,54 @@ class ControllerTodo {
                 }
             })
             .catch(err => {
-                console.log(err.message)
-
+                if (err.name === 'Not Found') {
+                    res.status(404).json({
+                        message: err.message
+                    })
+                } else if (err.errors[0].type === 'Validation error') {
+                    res.status(400).json({
+                        message: err.errors[0].message
+                    })
+                } else {
+                    res.status(500).json({
+                        message: 'Internal server error'
+                    })
+                }
             })
-
     }
 
     static patchOne (req, res) {
-
+        const todoId = +req.params.id
+        const newStatus = req.body.status
+        Todo.update({status: newStatus}, {
+            where: {id: todoId},
+            returning: true
+        })
+            .then(updated => {
+                if (updated[0] === 0) {
+                    throw {
+                        name: 'Not Found',
+                        message: `Todo with ID ${todoId} does not exist`
+                    }
+                } else {
+                    res.status(200).json(updated[1])
+                }
+            })
+            .catch(err => {
+                if (err.name === 'Not Found') {
+                    res.status(404).json({
+                        message: err.message
+                    })
+                } else if (err.errors[0].type === 'Validation error') {
+                    res.status(400).json({
+                        message: err.errors[0].message
+                    })
+                } else {
+                    res.status(500).json({
+                        message: 'Internal server error'
+                    })
+                }
+            })
     }
 
     static deleteOne (req, res) {

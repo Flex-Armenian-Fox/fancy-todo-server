@@ -57,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         isAfter: {
           args: getYesterday(new Date()),
-          msg: 'Due date must at least be today'
+          msg: 'Due date must be today or after'
         }
       }
     }

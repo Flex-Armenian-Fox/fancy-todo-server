@@ -3,6 +3,14 @@ const TodoController = require('../controllers/todo_controller.js')
 
 router.get('/', TodoController.getTodos)
 
+router.get('/:id', TodoController.getTodoById)
+
 router.post('/', TodoController.createTodo)
+
+router.put('/:id', TodoController.putTodo)
+
+router.patch('/:id', TodoController.patchTodo)
+
+router.delete('/:id', TodoController.deleteTodo)
 
 module.exports = router

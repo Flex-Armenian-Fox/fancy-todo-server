@@ -1,5 +1,6 @@
 'use strict';
-const { Model } = require('sequelize');
+const { Model, Sequelize } = require('sequelize');
+const formatDate = require('../helpers/date_formatter.js')
 
 module.exports = (sequelize, DataTypes) => {
   class Todo extends Model {
@@ -60,7 +61,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     due_date: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATE,     
       allowNull: false,
       validate: {
         notNull: {
@@ -71,9 +72,9 @@ module.exports = (sequelize, DataTypes) => {
           args: true,
           msg: 'attribute due_date cannot be empty'
         },
-        validateToday(value) {
-          console.log('masuk pak haji', value)
-          console.log('tipenya', typeof value)
+        isAfter: {
+          args: formatDate(new Date(), 1),
+          msg: 'max attribute due_date is today'
         }
       }
     }

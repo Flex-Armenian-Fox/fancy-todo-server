@@ -11,20 +11,137 @@ class Controller {
         })
     }
 
+    static getTodoById(req, res) {
+        const todoId = +req.params.id
+
+        Todo.findByPk(todoId)
+        .then(todo => {
+            if (!todo) {
+                return res.status(404).json({ message: `Todo with id ${todoId} not found`})
+            }
+
+            return res.status(200).json(todo)
+        })
+        .catch(err => {
+            res.status(500).json(err)
+        })
+    }
+
     static createTodo(req, res) {
         const { title, description, status, due_date } = req.body
 
         Todo.create({ title, description, status, due_date })
         .then(newTodo => {
-            // console.log("ke insert")
-            // res.status(201).json({
-            //     message: "Success create new todo",
-            //     data: newTodo
-            // })
+            res.status(201).json({
+                message: "Success create new todo",
+                data: newTodo
+            })
         })
         .catch(err => {
-            console.log(err)
-            res.status(500).json(err)
+            if (err.name == "SequelizeValidationError") return res.status(400).json({ message: err.errors[0].message })
+            
+            return res.status(500).json(err)
+        })
+    }
+
+    static putTodo(req, res) {
+        const todoId = +req.params.id
+        const { title, description, status, due_date } = req.body
+
+        Todo.findByPk(todoId)
+        .then(todo => {
+            if (!todo) {
+                throw {
+                    name: "NotFound",
+                    message: `Todo with id ${todoId} was not found`
+                }
+            }
+
+            return Todo.update({
+                title, description, status, due_date
+            }, {
+                where: { id: todoId },
+                returning: true
+            })
+        })
+        .then(newTodo => {
+            return res.status(200).json({
+                message: `Update success, ${newTodo[0]} row affected`,
+                data: newTodo[1][0]
+            })
+        })
+        .catch(err => {
+            if (err.name == "SequelizeValidationError") return res.status(400).json({ message: err.errors[0].message })
+
+            if (err.name == "NotFound") return res.status(404).json({ message: err.message })
+
+            return res.status(500).json(err)
+        })
+    }
+
+    static patchTodo(req, res) {
+        const todoId = +req.params.id
+
+        Todo.findByPk(todoId)
+        .then(todo => {
+            if (!todo) {
+                throw {
+                    name: "NotFound",
+                    message: `Todo with id ${todoId} was not found`
+                }
+            }
+            
+            return Todo.update({
+                status: req.body.status
+            }, {
+                where: { id: todoId },
+                returning: true
+            })
+        })
+        .then(newTodo => {
+            return res.status(200).json({
+                message: `Update success, ${newTodo[0]} row affected`,
+                data: newTodo[1][0]
+            })
+        })
+        .catch(err => {
+            if (err.name == "SequelizeValidationError") return res.status(400).json({ message: err.errors[0].message })
+
+            if (err.name == "NotFound") return res.status(404).json({ message: err.message })
+
+            return res.status(500).json(err)
+        })
+    }
+
+    static deleteTodo(req, res) {
+        const todoId = +req.params.id
+        let deletedTodo = null
+        
+        Todo.findByPk(todoId)
+        .then(todo => {
+            if (!todo) {
+                throw {
+                    name: 'NotFound',
+                    message: `Todo with id ${todoId} was not found`
+                }
+            }
+
+            deletedTodo = todo
+
+            return Todo.destroy({
+                where: { id: todoId }
+            })
+        })
+        .then(() => {
+            return res.status(200).json({
+                message: 'todo success to delete',
+                data: deletedTodo
+            })
+        })
+        .catch(err => {
+            if (err.name == "NotFound") return res.status(404).json({ message: err.message })
+
+            return res.status(500).json(err)
         })
     }
 }

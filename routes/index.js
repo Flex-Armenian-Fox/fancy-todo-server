@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const todoC = require('../controllers/todo-controller')
 const userC = require('../controllers/user-controller')
+const todoRoute = require('./todos')
 
+router.use('/todos', todoRoute)
 router.get('/todos/:id', todoC.getById)
 router.get('/todos', todoC.getTodo)
 router.put('/todos/:id', todoC.putTodo)

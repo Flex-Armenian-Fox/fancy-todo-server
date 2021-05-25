@@ -135,11 +135,18 @@ Mengubah keseluruhan data todo
 
   ```json
   {
-    "message": ["<field1> can not be null", "<field2> can not be null"]
+    "message": ["<field1> can not be null", "<field2> can not be null", "Date must be after today"]
   }
   ```
 
   - **Code:** 404 NOT FOUND <br />
+    **Content:**
+
+  ```json
+  {
+    "message": ["error not found"]
+  }
+  ```
   - **Code:** 500 INTERNAL SERVER ERROR <br />
 
 ---
@@ -192,7 +199,7 @@ menambahkan data todo
 
   ```json
   {
-    "message": ["<field1> can not be null", "<field2> can not be null"]
+    "message": ["<field1> can not be null", "<field2> can not be null", "Date must be after today"]
   }
   ```
 
@@ -242,4 +249,12 @@ Mengubah data status
 
   - **Code:** 400 BAD REQUEST <br />
   - **Code:** 404 NOT FOUND <br />
+    **Content:**
+
+  ```json
+  {
+    "message": ["error not found"]
+  }
+  ```
+  
   - **Code:** 500 INTERNAL SERVER ERROR <br />

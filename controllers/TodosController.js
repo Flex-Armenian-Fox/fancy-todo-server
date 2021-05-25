@@ -15,7 +15,6 @@ class TodosController{
             } else {
                 res.status(500).json({"error": err})
             }
-            // res.status(400).json(err)
         })   
     }
 
@@ -63,13 +62,12 @@ class TodosController{
                 res.status(500).json({"error": err})
             }
         })
-        
     }
 
-    static setStatusDone(req, res){
+    static setStatus(req, res){
         console.log("A")
         todo.update(
-            {status: "Done"}, {
+            {status: req.body.status}, {
                 where: {
                     id: req.params.id
                 }, returning: true

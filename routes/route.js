@@ -6,6 +6,6 @@ router.post('/todos', TodosController.createData)
 router.get('/todos', TodosController.toList)
 router.get('/todos/:id', TodosController.getById)
 router.put('/todos/:id', TodosController.updateData)
-router.patch('/todos/:id', TodosController.setStatusDone)
+router.patch('/todos/:id', TodosController.setStatus)
 router.delete('/todos/:id', TodosController.deleteData)
 module.exports = router;

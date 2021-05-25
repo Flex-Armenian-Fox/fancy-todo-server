@@ -2,10 +2,13 @@ const express = require('express')
 const app = express()
 const port = 3000
 const routes = require('./routes')
+const { hash, compareHash } = require('./helpers/brcypt')
+
+app.locals.hash = hash
+app.locals.compareHash = compareHash
 
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
-app.get('/', (req, res) => {res.send("hello world")})
 app.use('/', routes)
 
 app.listen(port, () => {

@@ -4,11 +4,11 @@
 
 ### Show Todos
 
-Mendapatkan semua data movie yang ada
+Mendapatkan semua data todo yang ada
 
 - **URL**
 
-  `/movies`
+  `/todos`
 
 - **Method:**
 
@@ -113,7 +113,7 @@ Mengubah keseluruhan data todo
 
 - **Success Response:**
 
-  - **Code:** 201 <br />
+  - **Code:** 200 <br />
     **Content:**
 
     ```json
@@ -170,7 +170,7 @@ menambahkan data todo
 
 - **Success Response:**
 
-  - **Code:** 201 <br />
+  - **Code:** 200 <br />
     **Content:**
 
     ```json
@@ -223,7 +223,7 @@ Mengubah data status
 
 - **Success Response:**
 
-  - **Code:** 201 <br />
+  - **Code:** 200 <br />
     **Content:**
 
     ```json

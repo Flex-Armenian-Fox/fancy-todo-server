@@ -14,10 +14,21 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Todo.init({
-    title: DataTypes.STRING,
+    title: {
+      type: DataTypes.STRING,
+    },
     description: DataTypes.STRING,
     status: DataTypes.STRING,
-    due_date: DataTypes.DATE
+    due_date: {
+      type: DataTypes.DATE,
+      validate: {
+        notBefore(date){
+          console.log("test")
+          if (date < new Date()) throw "Date must be after today"
+        }
+      }
+    },
+    user_id: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Todo',

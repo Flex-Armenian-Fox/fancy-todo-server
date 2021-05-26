@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     description: DataTypes.STRING,
     status: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM('ongoing', 'completed'),
       allowNull: false,
       validate: {
         notNull: {
@@ -41,8 +41,7 @@ module.exports = (sequelize, DataTypes) => {
           args: true,
           msg: 'Status cannot be empty'
         }
-      }
-    },
+      }},
     due_date: {
       type: DataTypes.DATE,
       allowNull: false,

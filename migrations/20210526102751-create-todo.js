@@ -15,7 +15,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       status: {
-        type: Sequelize.STRING
+        type: Sequelize.ENUM('ongoing', 'completed')
       },
       due_date: {
         type: Sequelize.DATE

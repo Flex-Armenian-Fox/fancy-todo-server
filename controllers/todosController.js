@@ -3,15 +3,17 @@ const { Todo } = require('../models');
 class Controller {
   static add(req, res) {
     Todo.create(req.body)
-      .then(result => res.status(201).json({ message: `created`, data: result }))
-      .catch(err => {
-        if (err.name == "SequelizeValidationError") {
+      .then((result) =>
+        res.status(201).json({ message: `created`, data: result })
+      )
+      .catch((err) => {
+        if (err.name == 'SequelizeValidationError') {
           let message = [];
           for (let i = 0; i < err.errors.length; i++) {
             const e = err.errors[i];
             message.push(e.message);
           }
-          console.log("message:", message);
+          console.log('message:', message);
           res.status(400).json({
             message: message,
           });
@@ -23,27 +25,27 @@ class Controller {
 
   static getAll(req, res) {
     Todo.findAll({ order: [`id`] })
-      .then(result => res.status(200).json(result))
-      .catch(err => res.status(404).json(err));
+      .then((result) => res.status(200).json(result))
+      .catch((err) => res.status(404).json(err));
   }
 
   static getById(req, res) {
     Todo.findByPk(req.params.id)
-      .then(result => {
+      .then((result) => {
         if (result) res.status(200).json(result);
-        else throw new Error;
+        else throw new Error();
       })
-      .catch(err => res.status(404).json({ message: `Not Found` }))
+      .catch((err) => res.status(404).json({ message: `Not Found` }));
   }
 
   static update(req, res) {
     Todo.update(req.body, { where: req.params, returning: true })
-      .then(result => {
+      .then((result) => {
         if (result[0] != 0) res.status(200).json(result[1][0]);
         else throw { name: `NotFound`, message: `Not found!` };
       })
-      .catch(err => {
-        if (err.name == "SequelizeValidationError") {
+      .catch((err) => {
+        if (err.name == 'SequelizeValidationError') {
           let message = [];
           for (let i = 0; i < err.errors.length; i++) {
             const e = err.errors[i];
@@ -62,18 +64,18 @@ class Controller {
 
   static updateStatus(req, res) {
     Todo.update(req.body, { where: req.params, returning: true })
-      .then(result => {
+      .then((result) => {
         if (result[0] != 0) res.status(200).json(result[1][0]);
         else throw { name: `NotFound`, message: `Not found!` };
       })
-      .catch(err => {
-        if (err.name == "SequelizeValidationError") {
+      .catch((err) => {
+        if (err.name == 'SequelizeValidationError') {
           let message = [];
           for (let i = 0; i < err.errors.length; i++) {
             const e = err.errors[i];
             message.push(e.message);
           }
-          console.log("message:", message);
+          console.log('message:', message);
           res.status(400).json({
             message: message,
           });
@@ -96,9 +98,9 @@ class Controller {
         } else throw { name: `NotFound`, message: `Not found!` };
       })
       .then(() => {
-        res.status(200).json({ message: `todo deleted`, deletedData: deleted })
+        res.status(200).json({ message: `todo deleted`, deletedData: deleted });
       })
-      .catch(err => {
+      .catch((err) => {
         if (err.name == `NotFound`) {
           res.status(404).json({ message: err.message });
         } else {

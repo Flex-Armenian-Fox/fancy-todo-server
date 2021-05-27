@@ -1,8 +1,10 @@
 const { Todo } = require('../models/index')
+const { todoAuth } = require('../helpers/auth')
 
 class Controller{
     static postTodo(req, res){
       let data = req.body
+      data.user_id = req.currentUser.id
       Todo.create(data)
           .then(result => {
               res.status(201).json({message:"created", data:result})
@@ -50,10 +52,10 @@ class Controller{
             });
     }
 
-
     static putTodo(req, res){
       let id = req.params.id
       let data = req.body
+      data.user_id = req.currentUser.id
       Todo.update(data, {where:{id:id}, returning:true})
         .then(result => {
           if (result[0] == 0){

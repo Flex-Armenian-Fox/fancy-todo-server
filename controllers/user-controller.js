@@ -1,4 +1,5 @@
 const { User, Todo } = require('../models/index')
+const {jwtEncrypt, jwtDecrypt} = require('../helpers/jwt')
 const user = require('../models/user')
 const {compareHash} = require('../helpers/brcypt')
 
@@ -20,7 +21,8 @@ class Controller{
         User.findOne({where:{email: req.body.email.toLowerCase()}})
             .then(user => {
                 if(compareHash(req.body.password, user.password)){
-                    res.status(200).json("masuk")
+                    const token = jwtEncrypt({id: user.id, email: user.email})
+                    res.status(200).json(token)
                 }
                 else res.status(400).json("salah password")
             })

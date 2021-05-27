@@ -5,7 +5,6 @@ function hash(password) {
 }
 
 function compareHash(password, db_password) {
-    console.log(password, db_password)
   return bcrypt.compareSync(password, db_password)
 }
 

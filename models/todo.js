@@ -1,5 +1,5 @@
 'use strict';
-const { Model, Sequelize } = require('sequelize');
+const { Model } = require('sequelize');
 const formatDate = require('../helpers/date_formatter.js')
 
 module.exports = (sequelize, DataTypes) => {
@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Todo.belongsTo(models.User, { foreignKey: 'user_id' })
     }
   };
   Todo.init({
@@ -75,6 +76,20 @@ module.exports = (sequelize, DataTypes) => {
         isAfter: {
           args: formatDate(new Date(), 1),
           msg: 'max attribute due_date is today'
+        }
+      }
+    },
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'Please provide user_id'
+        },
+        isInt: {
+          args: true,
+          msg: 'user_id must be in integer'
         }
       }
     }

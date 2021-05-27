@@ -40,6 +40,10 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: {
           args: true,
           msg: 'Status cannot be empty'
+        },
+        isIn: {
+          args: [['ongoing', 'completed']],
+          msg: 'Status must be "ongoing" or "completed"'
         }
       }},
     due_date: {

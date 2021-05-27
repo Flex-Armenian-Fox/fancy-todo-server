@@ -1,5 +1,6 @@
 const { User } = require('../models')
 const { comparePassword } = require('../helpers/bcrypt.js')
+const { generateToken } = require('../helpers/jwt.js')
 
 class Controller {
     static registerUser(req, res) {
@@ -31,16 +32,18 @@ class Controller {
             where: { email }
         })
         .then(user => {
+            const { id, email } = user
+            const payload = { id, email }
+
             if (!user) return res.status(404).json({ message: 'invalid credentials' })
 
             const isValidPassword = comparePassword(password, user.password)
 
             if (!isValidPassword) return res.status(404).json({ message: 'invalid credentials' })
 
-            res.status(200).json({
-                message: 'Login Success',
-                data: user
-            })
+            const token = generateToken(payload)
+
+            res.status(200).json({ message: 'Login Success', access_token: token })
         })
         .catch(err => {            
             res.status(500).json(err)

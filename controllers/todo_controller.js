@@ -2,7 +2,13 @@ const { Todo } = require('../models')
 
 class Controller {
     static getTodos(req, res) {
-        Todo.findAll()
+        const userId = req.currentUser
+
+        Todo.findAll({
+            where: {
+                user_id: userId
+            }
+        })
         .then(todos => {
             res.status(200).json(todos)
         })
@@ -29,8 +35,9 @@ class Controller {
 
     static createTodo(req, res) {
         const { title, description, status, due_date } = req.body
+        const userId = req.currentUser
 
-        Todo.create({ title, description, status, due_date })
+        Todo.create({ title, description, status, due_date, user_id: userId })
         .then(newTodo => {
             res.status(201).json({
                 message: "Success create new todo",

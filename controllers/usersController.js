@@ -30,7 +30,7 @@ class Controller {
         } else {
           throw {
             name: 'LoginError',
-            message: 'Username is not registered',
+            message: 'Email is not registered',
           };
         }
       })

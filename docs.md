@@ -1,33 +1,198 @@
 # Fancy Todos API Documentation
 
+## Register
+
+Create new user account to access Fancy Todo
+
+- **URL**
+
+  `/users/register`
+
+- **Method:**
+
+  `POST`
+
+- **URL Params**: none
+
+- **Data Params**: none
+
+- **Request Body**
+
+  ````json
+    {
+      "email": "<user email>",
+      "password": "<user password>"
+    }
+    ```
+
+  ````
+
+- **Success Response:**
+
+  - **Code:** 201 <br />
+    **Content:**
+    ```json
+    {
+      "success": true,
+      "user": {
+        "id": "<user ID>",
+        "email": "<user email>",
+        "password": "<user password (hashed)>",
+        "updatedAt": "2021-05-28T14:25:42.534Z",
+        "createdAt": "2021-05-28T14:25:42.534Z"
+      }
+    },
+    ```
+
+- **Error Response:**
+
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:** `"message": "Email <user email> is already registered"`
+
+    OR
+
+  - **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** `"message": "Internal server error`
+
+- **Sample Call:**
+
+  Request body:
+
+  ```json
+  {
+    "email": "user1",
+    "password": "password1"
+  }
+  ```
+
+  Response:
+
+  ```json
+  {
+    "success": true,
+    "user": {
+      "id": 14,
+      "email": "user1",
+      "password": "$2a$04$2qYosC8tAcGdA3GIDjnetevO44Rcp8gDmuQ/eUjvLwnfbWM.ySCnG",
+      "updatedAt": "2021-05-28T14:28:31.503Z",
+      "createdAt": "2021-05-28T14:28:31.503Z"
+    }
+  }
+  ```
+
+- **Notes:** none
+
+---
+
+## Login
+
+Login to access Fancy Todo
+
+- **URL**
+
+  `/users/login`
+
+- **Method:**
+
+  `POST`
+
+- **URL Params**: none
+
+- **Data Params**: none
+
+- **Request Body**
+
+  ````json
+    {
+      "email": "<user email>",
+      "password": "<user password>"
+    }
+    ```
+
+  ````
+
+- **Success Response:**
+
+  - **Code:** 201 <br />
+    **Content:**
+    ```json
+    {
+      "success": true,
+      "access_token": "<access token>"
+    },
+    ```
+
+- **Error Response:**
+
+  - **Code:** 403 FORBIDDEN <br />
+    **Content:** `"message": "Email is not registered"`
+
+  OR
+
+  - **Code:** 403 FORBIDDEN <br />
+    **Content:** `"message": "Wrong password"`
+
+    OR
+
+  - **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** `"message": "Internal server error`
+
+- **Sample Call:**
+
+  Request body:
+
+  ```json
+  {
+    "email": "user1",
+    "password": "password1"
+  }
+  ```
+
+  Response:
+
+  ```json
+  {
+    "success": true,
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjIyMjEyMzk5fQ.aWfNArS1JYnNYkDxrIyqFBqWuwxEKfEmFYs65t0bcjs"
+  }
+  ```
+
+- **Notes:** none
+
+---
+
 ## Add Todo
+
 Add new todo to Fancy Todo
 
-* **URL**
+- **URL**
 
   `/todos`
 
-* **Method:**
-  
+- **Method:**
+
   `POST`
-  
-* **URL Params**: none
 
-* **Data Params**: none
+- **URL Params**: none
 
-* **Request Body**
-    ```json
-      {
-        "title": "<todo title>",
-        "description": "<todo description>",
-        "status": "<todo status: done/undone>",
-        "due_date": "<todo due date, format: YYYY-MM-DD>"
-      }
-      ```
+- **Data Params**: none
 
-* **Success Response:**
+- **Request Body**
 
-  * **Code:** 201 <br />
+  ````json
+    {
+      "title": "<todo title>",
+      "description": "<todo description>",
+      "status": "<todo status: done/undone>",
+      "due_date": "<todo due date, format: YYYY-MM-DD>"
+    }
+    ```
+
+  ````
+
+- **Success Response:**
+
+  - **Code:** 201 <br />
     **Content:**
     ```json
     {
@@ -44,23 +209,21 @@ Add new todo to Fancy Todo
         }
     },
     ```
- 
-* **Error Response:**
 
-  * **Code:** 400 BAD REQUEST <br />
-    **Content:** `{
-  "message": [
-    "Due date cannot be before today"
-  ]}`
+- **Error Response:**
 
-     OR
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:** `"message": "Validation error: Due date cannot be the day before today"`
 
-  * **Code:** 500 INTERNAL SERVER ERROR <br />
-    **Content:** Error stack
+    OR
 
-* **Sample Call:**
+  - **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** `"message": "Internal server error`
+
+- **Sample Call:**
 
   Request body:
+
   ```json
   {
     "title": "REST API",
@@ -71,6 +234,7 @@ Add new todo to Fancy Todo
   ```
 
   Response:
+
   ```json
   {
     "id": 1,
@@ -83,28 +247,29 @@ Add new todo to Fancy Todo
   }
   ```
 
-* **Notes:** none
+- **Notes:** none
 
 ---
 
 ## Show All Todos
+
 Show all todos in Fancy Todo
 
-* **URL**
+- **URL**
 
   `/todos`
 
-* **Method:**
-  
+- **Method:**
+
   `GET`
-  
-* **URL Params**: none
 
-* **Data Params**: none
+- **URL Params**: none
 
-* **Success Response:**
+- **Data Params**: none
 
-  * **Code:** 200 <br />
+- **Success Response:**
+
+  - **Code:** 200 <br />
     **Content:**
     ```json
     [
@@ -128,225 +293,230 @@ Show all todos in Fancy Todo
       }
     ]
     ```
- 
-* **Error Response:**
 
-  * **Code:** 500 INTERNAL SERVER ERROR <br />
-    **Content:** Error stack
+- **Error Response:**
 
-* **Notes:** none
+  - **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** `"message": "Internal server error`
+
+- **Notes:** none
+
 ---
+
 ## Show Todo by ID
+
 Show todo in Fancy Todo by ID
 
-* **URL**
+- **URL**
 
   `/todos`
 
-* **Method:**
-  
+- **Method:**
+
   `GET`
-  
-* **URL Params**
+
+- **URL Params**
 
   `/todos/:id`
 
   **Required:**
-  
+
   `id=[integer]`
 
-* **Data Params**: none
+- **Data Params**: none
 
-* **Success Response:**
+- **Success Response:**
 
-  * **Code:** 200 <br />
+  - **Code:** 200 <br />
     **Content:**
     ```json
-      {
-        "id": "<id number>",
-        "title": "<todo title>",
-        "description": "<todo description>",
-        "status": "<todo status: done/undone>",
-        "due_date": "<todo due date>",
-        "createdAt": "2021-05-24T15:01:21.735Z",
-        "updatedAt": "2021-05-24T15:01:21.735Z"
-      }
+    {
+      "id": "<id number>",
+      "title": "<todo title>",
+      "description": "<todo description>",
+      "status": "<todo status: done/undone>",
+      "due_date": "<todo due date>",
+      "createdAt": "2021-05-24T15:01:21.735Z",
+      "updatedAt": "2021-05-24T15:01:21.735Z"
+    }
     ```
- 
-* **Error Response:**
 
-  * **Code:** 404 NOT FOUND <br />
-    **Content:** `{
-  "message": "Not Found"
-}`
+- **Error Response:**
 
-* **Notes:** none
+  - **Code:** 404 NOT FOUND <br />
+    **Content:** `"message": "Todo not found"`
+
+- **Notes:** none
+
 ---
+
 ## Update Todo
+
 Update all todo field in Fancy Todo
 
-* **URL**
+- **URL**
 
   `/todos`
 
-* **Method:**
-  
+- **Method:**
+
   `PUT`
-  
-* **URL Params**
+
+- **URL Params**
 
   `/todos/:id`
 
   **Required:**
-  
+
   `id=[integer]`
 
-* **Data Params**: none
+- **Data Params**: none
 
-* **Request Body**
-    ```json
-      {
-        "title": "<todo title>",
-        "description": "<todo description>",
-        "status": "<todo status: done/undone>",
-        "due_date": "<todo due date, format: YYYY-MM-DD>"
-      }
-      ```
+- **Request Body**
 
-* **Success Response:**
+  ````json
+    {
+      "title": "<todo title>",
+      "description": "<todo description>",
+      "status": "<todo status: done/undone>",
+      "due_date": "<todo due date, format: YYYY-MM-DD>"
+    }
+    ```
 
-  * **Code:** 200 <br />
+  ````
+
+- **Success Response:**
+
+  - **Code:** 200 <br />
     **Content:**
     ```json
-      {
-        "id": "<id number>",
-        "title": "<todo title>",
-        "description": "<todo description>",
-        "status": "<todo status: done/undone>",
-        "due_date": "<todo due date>",
-        "createdAt": "2021-05-24T15:01:21.735Z",
-        "updatedAt": "2021-05-24T15:01:21.735Z"
-      }
+    {
+      "id": "<id number>",
+      "title": "<todo title>",
+      "description": "<todo description>",
+      "status": "<todo status: done/undone>",
+      "due_date": "<todo due date>",
+      "createdAt": "2021-05-24T15:01:21.735Z",
+      "updatedAt": "2021-05-24T15:01:21.735Z"
+    }
     ```
- 
-* **Error Response:**
 
-  * **Code:** 400 BAD REQUEST <br />
-    **Content:** `{
-  "message": [
-    "Due date cannot be before today"
-  ]}`
+- **Error Response:**
+
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:** `"message": "Validation error: Due date cannot be the day before today"`
 
     OR
 
-  * **Code:** 404 NOT FOUND <br />
-    **Content:** `{
-    "message": "Not Found"
-  }`
+  - **Code:** 404 NOT FOUND <br />
+    **Content:** `"message": "Todo not found"`
 
     OR
 
-  * **Code:** 500 INTERNAL SERVER ERROR <br />
-    **Content:** Error stack
+  - **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** `"message": "Internal server error"`
 
-* **Notes:** none
+- **Notes:** none
+
 ---
+
 ## Update Todo Status
+
 Update only todo status field in Fancy Todo
 
-* **URL**
+- **URL**
 
   `/todos`
 
-* **Method:**
-  
+- **Method:**
+
   `PATCH`
-  
-* **URL Params**
+
+- **URL Params**
 
   `/todos/:id`
 
   **Required:**
-  
+
   `id=[integer]`
 
-* **Data Params**: none
+- **Data Params**: none
 
-* **Request Body**
-    ```json
-      {
-        "status": "<todo status: done/undone>"
-      }
-      ```
+- **Request Body**
 
-* **Success Response:**
+  ````json
+    {
+      "status": "<todo status: done/undone>"
+    }
+    ```
 
-  * **Code:** 200 <br />
+  ````
+
+- **Success Response:**
+
+  - **Code:** 200 <br />
     **Content:**
     ```json
-      {
-        "id": "<id number>",
-        "title": "<todo title>",
-        "description": "<todo description>",
-        "status": "<todo status: done/undone>",
-        "due_date": "<todo due date>",
-        "createdAt": "2021-05-24T15:01:21.735Z",
-        "updatedAt": "2021-05-24T15:01:21.735Z"
-      }
+    {
+      "id": "<id number>",
+      "title": "<todo title>",
+      "description": "<todo description>",
+      "status": "<todo status: done/undone>",
+      "due_date": "<todo due date>",
+      "createdAt": "2021-05-24T15:01:21.735Z",
+      "updatedAt": "2021-05-24T15:01:21.735Z"
+    }
     ```
- 
-* **Error Response:**
 
-  * **Code:** 400 BAD REQUEST <br />
-    **Content:** `{
-  "message": [
-    "Due date cannot be before today"
-  ]}`
+- **Error Response:**
+
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:** `"message": "Validation error: Due date cannot be the day before today"`
 
     OR
 
-  * **Code:** 404 NOT FOUND <br />
-    **Content:** `{
-    "message": "Not Found"
-  }`
+  - **Code:** 404 NOT FOUND <br />
+    **Content:** `"message": "Todo not found"`
 
     OR
 
-  * **Code:** 500 INTERNAL SERVER ERROR <br />
-    **Content:** Error stack
+  - **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** `"message": "Internal server error"`
 
-* **Notes:** none
+- **Notes:** none
+
 ---
+
 ## Delete Todo
+
 Delete todo from Fancy Todo
 
-* **URL**
+- **URL**
 
   `/todos`
 
-* **Method:**
-  
+- **Method:**
+
   `DELETE`
-  
-* **URL Params**
+
+- **URL Params**
 
   `/todos/:id`
 
   **Required:**
-  
+
   `id=[integer]`
 
-* **Data Params**: none
+- **Data Params**: none
 
-* **Success Response:**
+- **Success Response:**
 
-  * **Code:** 200 <br />
+  - **Code:** 200 <br />
     **Content:**
     ```json
     {
       "message": "todo deleted",
-      "deletedData": 
-      {
+      "deletedData": {
         "id": "<id number>",
         "title": "<todo title>",
         "description": "<todo description>",
@@ -357,17 +527,15 @@ Delete todo from Fancy Todo
       }
     }
     ```
- 
-* **Error Response:**
 
- * **Code:** 404 NOT FOUND <br />
-    **Content:** `{
-    "message": "Not Found"
-  }`
+- **Error Response:**
 
-    OR
+- **Code:** 404 NOT FOUND <br />
+  **Content:** `"message": "Todo not found"`
 
-  * **Code:** 500 INTERNAL SERVER ERROR <br />
-    **Content:** Error stack
+  OR
 
-* **Notes:** none
+- **Code:** 500 INTERNAL SERVER ERROR <br />
+  **Content:** `"message": "Internal server error"`
+
+- **Notes:** none

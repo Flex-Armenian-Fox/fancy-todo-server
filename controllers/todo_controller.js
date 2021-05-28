@@ -2,7 +2,7 @@ const { Todo } = require('../models')
 
 class Controller {
     static getTodos(req, res) {
-        const userId = req.currentUser
+        const userId = req.currentUser.id
 
         Todo.findAll({
             where: {
@@ -123,14 +123,17 @@ class Controller {
     static deleteTodo(req, res) {
         const todoId = +req.params.id
         let deletedTodo = null
+
+        console.log("Controller::::", req.params)
+
+        if (!req.params.id) {
+            throw { name: 'BadRequest', message: 'Please provide todo id'}
+        }
         
         Todo.findByPk(todoId)
         .then(todo => {
             if (!todo) {
-                throw {
-                    name: 'NotFound',
-                    message: `Todo with id ${todoId} was not found`
-                }
+                throw { name: 'NotFound', message: `Todo with id ${todoId} was not found` }
             }
 
             deletedTodo = todo
@@ -146,7 +149,11 @@ class Controller {
             })
         })
         .catch(err => {
-            if (err.name == "NotFound") return res.status(404).json({ message: err.message })
+            const { name, message } = err
+
+            if (name == "NotFound") return res.status(404).json({ message })
+
+            if (name == "BadRequest") return res.status(400).json({ message })
 
             return res.status(500).json(err)
         })

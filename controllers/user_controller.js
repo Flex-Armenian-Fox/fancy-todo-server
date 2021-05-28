@@ -35,11 +35,11 @@ class Controller {
             const { id, email } = user
             const payload = { id, email }
 
-            if (!user) return res.status(404).json({ message: 'invalid credentials' })
+            if (!user) return res.status(401).json({ message: 'invalid credentials' })
 
             const isValidPassword = comparePassword(password, user.password)
 
-            if (!isValidPassword) return res.status(404).json({ message: 'invalid credentials' })
+            if (!isValidPassword) return res.status(401).json({ message: 'invalid credentials' })
 
             const token = generateToken(payload)
 

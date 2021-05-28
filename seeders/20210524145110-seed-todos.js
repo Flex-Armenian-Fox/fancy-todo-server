@@ -13,14 +13,6 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        title: 'Submit rekap pajak',
-        description: 'tahun 2020',
-        status: 'ongoing',
-        due_date: new Date('2021-06-30T12:00:00Z'),
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
         title: 'Beli kado ultah doi',
         description: 'budget 200ribu',
         status: 'ongoing',

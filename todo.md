@@ -87,70 +87,6 @@ Mendapatkan Todo Spesifik
 
 ---
 
-### Put Todos
-
-Mengubah keseluruhan data todo
-
-- **URL**
-
-  `/todos`
-
-- **Method:**
-
-  `PUT`
-
-- **Url Param:** ID
-- **Body:**
-
-  ```json
-  {
-    "title": <title todos> required,
-    "description": <description> required,
-    "status" : <status> required,
-    "due_date": <due date> required
-  }
-  ```
-
-- **Success Response:**
-
-  - **Code:** 200 <br />
-    **Content:**
-
-    ```json
-    {
-      "message": "put completed",
-      "data": {
-            "title": "<title todos>",
-            "description": "<description>",
-            "status" : "<status>",
-            "due_date": "<due date>"
-        }
-    }
-    ```
-
-- **Error Response:**
-
-  - **Code:** 400 BAD REQUEST <br />
-    **Content:**
-
-  ```json
-  {
-    "message": ["<field1> can not be null", "<field2> can not be null", "Date must be after today"]
-  }
-  ```
-
-  - **Code:** 404 NOT FOUND <br />
-    **Content:**
-
-  ```json
-  {
-    "message": ["error not found"]
-  }
-  ```
-  - **Code:** 500 INTERNAL SERVER ERROR <br />
-
----
-
 ### Create Todos
 
 menambahkan data todo
@@ -197,12 +133,101 @@ menambahkan data todo
   - **Code:** 400 BAD REQUEST <br />
     **Content:**
 
+    ```json
+    {
+      "message": ["Title cannot be empty", "Date must be after today"]
+    }
+    ```
+   - **Code:** 401 AUTHENTICATION ERROR <br />
+    **Content:**
+
+      ```json
+      {
+        "message": "Login Error"
+      }
+      ```
+
+  - **Code:** 500 INTERNAL SERVER ERROR <br />
+
+---
+### Put Todos
+
+Mengubah keseluruhan data todo
+
+- **URL**
+
+  `/todos`
+
+- **Method:**
+
+  `PUT`
+
+- **Url Param:** ID
+- **Body:**
+
   ```json
   {
-    "message": ["<field1> can not be null", "<field2> can not be null", "Date must be after today"]
+    "title": <title todos> required,
+    "description": <description> required,
+    "status" : <status> required,
+    "due_date": <due date> required
   }
   ```
 
+- **Success Response:**
+
+  - **Code:** 200 <br />
+    **Content:**
+
+    ```json
+    {
+      "message": "put completed",
+      "data": {
+            "title": "<title todos>",
+            "description": "<description>",
+            "status" : "<status>",
+            "due_date": "<due date>"
+        }
+    }
+    ```
+
+- **Error Response:**
+   - **Code:** 401 AUTHENTICATION ERROR <br />
+    **Content:**
+
+      ```json
+      {
+        "message": "Login Error"
+      }
+      ```
+  
+  - **Code:** 401 AUTHENTICATION ERROR <br />
+
+    **Content:**
+
+    ```json
+    {
+      "message": "User does not have permission"
+    }
+    ```
+
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:**
+
+    ```json
+    {
+      "message": ["Title cannot be empty", "Date must be after today"]
+    }
+    ```
+
+  - **Code:** 404 NOT FOUND <br />
+    **Content:**
+
+    ```json
+    {
+      "message": "Todo not Found"
+    }
+    ```
   - **Code:** 500 INTERNAL SERVER ERROR <br />
 
 ---
@@ -247,14 +272,206 @@ Mengubah data status
 
 - **Error Response:**
 
-  - **Code:** 400 BAD REQUEST <br />
+   - **Code:** 401 AUTHENTICATION ERROR <br />
+    **Content:**
+
+      ```json
+      {
+        "message": "Login Error"
+      }
+      ```
+
+  - **Code:** 401 AUTHENTICATION ERROR <br />
+
+    **Content:**
+
+    ```json
+    {
+      "message": "User does not have permission"
+    }
+    ```
+  
+
   - **Code:** 404 NOT FOUND <br />
     **Content:**
 
+    ```json
+    {
+      "message": "Todo not found"
+    }
+    ```
+  
+  - **Code:** 500 INTERNAL SERVER ERROR <br />
+
+  ---
+### Delete Todos
+
+Menghapus data todo
+
+- **URL**
+
+  `/todos`
+
+- **Method:**
+
+  `DELETE`
+
+- **Url Param:** ID
+
+
+- **Success Response:**
+
+  - **Code:** 200 <br />
+    **Content:**
+
+    ```json
+    {
+      "message": "todo success to delete",
+    }
+    ```
+
+- **Error Response:**
+
+   - **Code:** 401 AUTHENTICATION ERROR <br />
+    **Content:**
+
+      ```json
+      {
+        "message": "Login Error"
+      }
+      ```
+
+  - **Code:** 401 AUTHENTICATION ERROR <br />
+
+    **Content:**
+
+    ```json
+    {
+      "message": "User does not have permission"
+    }
+    ```
+  
+
+  - **Code:** 404 NOT FOUND <br />
+    **Content:**
+
+    ```json
+    {
+      "message": "Todo not found"
+    }
+    ```
+  
+  - **Code:** 500 INTERNAL SERVER ERROR <br />
+
+--- 
+### Register User
+
+Mendaftarkan User baru
+
+- **URL**
+
+  `/users/register`
+
+- **Method:**
+
+  `POST`
+
+- **Url Param:** none
+- **Body:**
+
   ```json
   {
-    "message": ["error not found"]
+    "email": <email user>,
+    "password": <password user>
   }
   ```
-  
+
+- **Success Response:**
+
+  - **Code:** 200 <br />
+    **Content:**
+
+    ```json
+    {
+      "message": "User Registered"
+    }
+    ```
+
+- **Error Response:**
+
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:**
+
+    ```json
+    {
+      "message": "Please Fill Email and Password"
+    }
+    ```
+
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:**
+
+    ```json
+    {
+      "message": "Email already taken"
+    }
+    ```
+
+  - **Code:** 500 INTERNAL SERVER ERROR <br />
+
+--- 
+### Login User
+
+Login user
+
+- **URL**
+
+  `/users/login`
+
+- **Method:**
+
+  `POST`
+
+- **Url Param:** none
+- **Body:**
+
+  ```json
+  {
+    "email": <email user>,
+    "password": <password user>
+  }
+  ```
+
+- **Success Response:**
+
+  - **Code:** 200 <br />
+    **Content:**
+
+    ```json
+    {
+      "message": "Login Success",
+      "access_token": <access token>
+    }
+    ```
+
+- **Error Response:**
+
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:**
+
+    ```json
+    {
+      "message": "Please Fill Email and Password"
+    }
+    ```
+
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:**
+
+    ```json
+    {
+      "message": "Login Error, Please Try Again"
+    }
+    ```
+
   - **Code:** 500 INTERNAL SERVER ERROR <br />

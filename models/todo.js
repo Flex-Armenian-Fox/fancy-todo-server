@@ -11,11 +11,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Todo.belongsTo(models.User, {foreignKey:"user_id"})
     }
   };
   Todo.init({
     title: {
       type: DataTypes.STRING,
+      validate: {
+        notEmpty: {msg: "Todo title must not be empty"}
+      }
     },
     description: DataTypes.STRING,
     status: DataTypes.STRING,

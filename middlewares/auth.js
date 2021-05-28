@@ -1,4 +1,4 @@
-const {jwtDecrypt} = require("./jwt")
+const {jwtDecrypt} = require("../helpers/jwt")
 const {User, Todo} = require("../models")
 
 const authentication = (req, res, next) =>{
@@ -14,10 +14,10 @@ const authentication = (req, res, next) =>{
                     next()
                 }
             }) .catch(err => {
-                res.status(401).json({message: "invalid token"})
+                next(err)
             })
     } catch(err) {
-        res.status(401).json({message:"invalid token"})
+        next(err)
     } 
 }
 
@@ -28,14 +28,17 @@ const todoAuth = (req, res, next) =>{
         .then(todo =>{
             if (!todo) {
                 throw {
-                    name: "AuthorizationError",
+                    name: "TodoNotFound",
                     message: `todo with id ${id} not found`,
                 }
             }
-            if (todo.user_id == req.currentUser.id) next()
-            else throw {name:"Authorization Error", message:"User do not have permission"}
+            if (todo.user_id == req.currentUser.id) {
+                req.target = todo
+                next()
+            }
+            else throw {name:"AuthorizationError"}
         }) .catch(err =>{
-            res.status(401).json({message: err || `not authorized`})
+            next(err)
         })
 }
 

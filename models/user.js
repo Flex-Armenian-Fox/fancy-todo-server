@@ -12,20 +12,23 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      User.hasMany(models.Todo, {foreignKey:"user_id"})
     }
   };
   User.init({
     email: {
       type: DataTypes.STRING,
-      validate: {
-        notEmpty: {"msg": "email cannot be empty"},
+      unique: {
+        msg: 'email is already taken'
       },
-      unique: true
+      validate: {
+        notEmpty: {msg: "email cannot be empty"},
+      },
     },
     password: {
       type: DataTypes.STRING,
       validate: {
-        notEmpty: {"msg": "password cannot be empty"},
+        notEmpty: {msg: "password cannot be empty"},
       }
     },
   }, {

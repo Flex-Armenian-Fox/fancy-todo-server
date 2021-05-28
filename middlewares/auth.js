@@ -31,8 +31,6 @@ const authorizeUser = (req, res, next) => {
     const { id } = req.params
     const userId =  req.currentUser.id
 
-    console.log("auth::::", req.params)
-
     Todo.findOne({
         where: { id }
     })

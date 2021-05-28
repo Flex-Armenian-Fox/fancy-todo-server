@@ -16,10 +16,15 @@ class Controller {
             })
         })
         .catch(err => {
-            if (err.name == "SequelizeUniqueConstraintError") {
+            const { name } = err
+            if (name == "SequelizeUniqueConstraintError") {
                 return res.status(400).json({
                     message: 'Email already exist'
                 })
+            }
+
+            if (name == "SequelizeValidationError") {
+                return res.status(400).json({ message: `Please provide field username or password` })
             }
             res.status(500).json(err)
         }) 
@@ -31,12 +36,11 @@ class Controller {
         User.findOne({
             where: { email }
         })
-        .then(user => {
+        .then(user => {                        
+            if (!user) return res.status(401).json({ message: 'invalid credentials' })
+            
             const { id, email } = user
             const payload = { id, email }
-
-            if (!user) return res.status(401).json({ message: 'invalid credentials' })
-
             const isValidPassword = comparePassword(password, user.password)
 
             if (!isValidPassword) return res.status(401).json({ message: 'invalid credentials' })
@@ -45,8 +49,8 @@ class Controller {
 
             res.status(200).json({ message: 'Login Success', access_token: token })
         })
-        .catch(err => {            
-            res.status(500).json(err)
+        .catch(err => {        
+            res.status(500).json({ message: err.message })
         })
     }
 }

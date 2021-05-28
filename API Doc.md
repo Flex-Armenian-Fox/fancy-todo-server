@@ -11,6 +11,8 @@ List of Endpoints:
 | **PUT**     | /todos/:id | Mengupdate kolom title, description, status, due_date berdasarkan param **id** yang dikirim |
 | **PATCH**   | /todos/:id | Mengupdate kolom status berdasarkan param **id** yang dikirim                               |
 | **DELETE**  | /todos/:id | Menghapus todo berdasarkan param **id** yang dikirim                                        |
+| **POST** | /users/register | Register user baru |
+| **POST** | /users/login | Melakukan proses login |
 ----------
 
 ### Menampilkan semua todo yang ada di database
@@ -243,6 +245,81 @@ List of Endpoints:
       ```json
       {
           "message": "Todo with id <id> was not found"
+      }
+      ```
+    - **Response Code** : `500`
+    - **Content** : `Internal Server Error`
+
+----------
+### Register user baru
+- **URL** : `/users/register`
+- **Method** : `POST`
+- **URL Param** : none
+- **Body** : 
+    ```json
+    {
+        "email": "jhondoe@mail.com",
+        "password": "my password"
+    }
+    ```
+- **Success response** :
+  - **Response Code** : `201`
+  - **Content** :
+    ```json
+    {
+        "message": "User create successfully",
+        "data": {
+            "id": 7,
+            "email": "jhondoe@mail.com",
+            "createdAt": "2021-05-28T14:12:13.979Z"
+        }
+    }
+    ```
+- **Error response** :    
+    - **Response Code** : `400`
+    - **Content** :
+      ```json
+      {
+          "message": "Please provide field username or password"
+      }
+      ```
+    - **Response Code** : `500`
+    - **Content** : `Internal Server Error`
+
+----------
+### Melakukan proses login
+- **URL** : `/users/login`
+- **Method** : `POST`
+- **URL Param** : none
+- **Body** : 
+    ```json
+    {
+        "email": "jhondoe@mail.com",
+        "password": "my password"
+    }
+    ```
+- **Success response** :
+  - **Response Code** : `200`
+  - **Content** :
+    ```json
+    {
+        "message": "Login Success",
+        "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZW1haWwiOiJqaG9uZG9lQG1haWwuY29tIiwiaWF0IjoxNjIyMjEyMjc1fQ.APFNGkqE_LVf_RyNopLu_MijijebwFqPJTEeelMFfiY"
+    }
+    ```
+- **Error response** :    
+    - **Response Code** : `400`
+    - **Content** :
+      ```json
+      {
+          "message": "Please provide field username or password"
+      }
+      ```
+    - **Response Code** : `401`
+    - **Content** :
+      ```json
+      {
+          "message": "invalid credentials"
       }
       ```
     - **Response Code** : `500`

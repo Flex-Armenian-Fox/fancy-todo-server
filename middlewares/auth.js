@@ -1,12 +1,13 @@
 const jwt = require('jsonwebtoken');
-const privateKey = 'privatekey';
+const privateKey = process.env.PRIVATE_KEY;
 const { Todo } = require('../models');
 
 const authentication = (req, res, next) => {
   if (!req.headers.access_token) {
-    return res
-      .status(401)
-      .json({ success: false, message: 'Missing access token' });
+    throw {
+      name: 'TokenMissing',
+      message: 'Missing access token',
+    };
   }
 
   try {
@@ -14,7 +15,7 @@ const authentication = (req, res, next) => {
     req.userId = decoded.id;
     next();
   } catch (error) {
-    res.status(401).json({ success: false, message: 'Token invalid' });
+    next(error);
   }
 };
 
@@ -23,18 +24,15 @@ const todosAuthorization = (req, res, next) => {
   Todo.findOne({ where: { id, UserId: req.userId } })
     .then((todo) => {
       if (!todo) {
-        return res
-          .status(404)
-          .json({ success: false, message: 'Todo not found' });
+        throw {
+          name: 'NotFound',
+          message: 'Todo not found',
+        };
       }
       req.todo = todo;
       next();
     })
-    .catch((err) => {
-      res
-        .status(err.status || 500)
-        .json({ succes: false, error: err.message || err });
-    });
+    .catch((err) => next(err));
 };
 
 module.exports = { authentication, todosAuthorization };

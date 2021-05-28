@@ -1,7 +1,7 @@
 const { Todo } = require('../models');
 
 class Controller {
-  static add(req, res) {
+  static add(req, res, next) {
     const { title, description, status, due_date } = req.body;
     Todo.create({
       title,
@@ -11,36 +11,29 @@ class Controller {
       UserId: req.userId,
     })
       .then((result) =>
-        res.status(201).json({ message: `created`, data: result })
+        res.status(201).json({ message: 'created', data: result })
       )
-      .catch((err) => {
-        if (err.name == 'SequelizeValidationError') {
-          let message = [];
-          for (let i = 0; i < err.errors.length; i++) {
-            const e = err.errors[i];
-            message.push(e.message);
-          }
-          console.log('message:', message);
-          res.status(400).json({
-            message: message,
-          });
-        } else {
-          res.status(500).json(err);
-        }
-      });
+      .catch((err) => next(err));
   }
 
-  static getAll(req, res) {
+  static getAll(req, res, next) {
     Todo.findAll({ where: { UserId: req.userId }, order: [`id`] })
-      .then((result) => res.status(200).json(result))
-      .catch((err) => res.status(404).json(err));
+      .then((result) => {
+        if (result.length > 0)
+          res.status(200).json({ success: true, data: result });
+        throw {
+          name: 'NotFound',
+          message: 'Todo not found',
+        };
+      })
+      .catch((err) => next(err));
   }
 
-  static getById(req, res) {
+  static getById(req, res, next) {
     res.status(200).json({ success: true, data: req.todo });
   }
 
-  static update(req, res) {
+  static update(req, res, next) {
     const { title, description, status, due_date } = req.body;
     const { todo } = req;
 
@@ -58,14 +51,10 @@ class Controller {
     todo
       .save()
       .then(() => res.status(200).json({ success: true, data: todo }))
-      .catch((err) => {
-        res
-          .status(err.status || 500)
-          .json({ succes: false, error: err.message || err });
-      });
+      .catch((err) => next(err));
   }
 
-  static updateStatus(req, res) {
+  static updateStatus(req, res, next) {
     const { status } = req.body;
     const { todo } = req;
 
@@ -73,14 +62,10 @@ class Controller {
     todo
       .save()
       .then(() => res.status(200).json({ success: true, data: todo }))
-      .catch((err) => {
-        res
-          .status(err.status || 500)
-          .json({ succes: false, error: err.message || err });
-      });
+      .catch((err) => next(err));
   }
 
-  static delete(req, res) {
+  static delete(req, res, next) {
     const { todo } = req;
     todo
       .destroy()
@@ -91,11 +76,7 @@ class Controller {
           deletedData: req.todo,
         });
       })
-      .catch((err) => {
-        res
-          .status(err.status || 500)
-          .json({ succes: false, error: err.message || err });
-      });
+      .catch((err) => next(err));
   }
 }
 

@@ -1,15 +1,16 @@
 const { User } = require(`../models`);
 const { compareHash } = require('../helpers/bcrypt');
 const jwt = require('jsonwebtoken');
+const privateKey = process.env.PRIVATE_KEY;
 
 class Controller {
-  static register(req, res) {
+  static register(req, res, next) {
     User.create(req.body)
       .then((user) => res.status(201).json({ success: true, user: user }))
-      .catch((err) => res.status(500).json({ success: false, message: err }));
+      .catch((err) => next(err));
   }
 
-  static login(req, res) {
+  static login(req, res, next) {
     User.findOne({
       where: {
         email: req.body.email,
@@ -18,22 +19,22 @@ class Controller {
       .then((user) => {
         if (user) {
           if (compareHash(req.body.password, user.password)) {
-            const access_token = jwt.sign({ id: user.id }, 'privatekey');
+            const access_token = jwt.sign({ id: user.id }, privateKey);
             res.status(201).json({ success: true, access_token });
           } else {
             throw {
-              message: 'Login failed! Wrong password',
+              name: 'LoginError',
+              message: 'Wrong password',
             };
           }
         } else {
           throw {
-            message: 'Login failed! Username is not registered!',
+            name: 'LoginError',
+            message: 'Username is not registered',
           };
         }
       })
-      .catch((err) => {
-        res.status(404).json({ success: false, message: err.message });
-      });
+      .catch((err) => next(err));
   }
 }
 

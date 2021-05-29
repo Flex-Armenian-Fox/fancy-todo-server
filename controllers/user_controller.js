@@ -3,54 +3,50 @@ const { comparePassword } = require('../helpers/bcrypt.js')
 const { generateToken } = require('../helpers/jwt.js')
 
 class Controller {
-    static registerUser(req, res) {
+    static registerUser(req, res, next) {
         User.create({
             email: req.body.email,
             password: req.body.password
         })
         .then(user => {
             const { id, email, createdAt } = user
+
             res.status(201).json({
                 message: 'User create successfully',
                 data: { id, email, createdAt }
             })
         })
         .catch(err => {
-            const { name } = err
-            if (name == "SequelizeUniqueConstraintError") {
-                return res.status(400).json({
-                    message: 'Email already exist'
-                })
-            }
+            const { name, message } = err
 
-            if (name == "SequelizeValidationError") {
-                return res.status(400).json({ message: `Please provide field username or password` })
-            }
-            res.status(500).json(err)
+            next({ name, message })
         }) 
     }
 
-    static login(req, res) {
+    static login(req, res, next) {
         const { email, password } = req.body
 
         User.findOne({
             where: { email }
         })
         .then(user => {                        
-            if (!user) return res.status(401).json({ message: 'invalid credentials' })
+            if (!user) throw { name: 'LoginFailed' }
             
             const { id, email } = user
             const payload = { id, email }
             const isValidPassword = comparePassword(password, user.password)
 
-            if (!isValidPassword) return res.status(401).json({ message: 'invalid credentials' })
+            if (!isValidPassword) throw { name: 'LoginFailed' }
 
             const token = generateToken(payload)
 
             res.status(200).json({ message: 'Login Success', access_token: token })
         })
-        .catch(err => {        
-            res.status(500).json({ message: err.message })
+        .catch(err => {    
+            const { name, message } = err
+
+            next({ name, message })
+
         })
     }
 }

@@ -1,6 +1,8 @@
 'use strict';
 const { Model } = require('sequelize');
 const { encryptPassowrd } = require('../helpers/bcrypt.js')
+const faker = require('faker')
+const fs = require('fs')
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -12,6 +14,24 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       User.hasMany(models.Todo, { foreignKey: 'user_id' })
+    }
+
+    static generateDummyData(totalData = 1) {
+      let results = []
+
+      for (let i = 0; i < totalData; i++) {
+        results.push({
+          email: faker.internet.email(),
+          password: faker.internet.password(),
+          createdAt: new Date(),
+          updatedAt: new Date()
+        })
+        
+      }
+      
+      fs.writeFileSync('./seeders/users.json', JSON.stringify(results, null, 2))
+
+      return results
     }
   };
   User.init({

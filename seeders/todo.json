@@ -1,26 +1,37 @@
 [
     {
-        "title": "Menangkap ayam di kebun",
-        "description": "Pergi ke kebun di pagi hari untuk menangkap ayam",
+        "title": "Menonton Anime",
+        "description": "Menonton Anime One Piece",
         "status": "New",
-        "due_date": "2021-05-24T00:56:21.112Z"
+        "due_date": "2020-05-01",
+        "user_id": 1
     },
     {
-        "title": "Memotong ayam, minimal 1000 ayam per jam",
-        "description": "Setelah selesai ditangkap, ayam ayam tersebut dipotong sampai mati dan tidak tersisa. Jika sampai tersisa, maka yang menangkap yang akan dipotong!!",
-        "status": "New",
-        "due_date": "2021-05-24T05:12:21.112Z"
+        "title": "Bermain Game",
+        "description": "Bermain game resident evil 8",
+        "status": "Process",
+        "due_date": "2021-05-01",
+        "user_id": 4
     },
     {
-        "title": "Mencabut bulu ayam mati",
-        "description": "Setelah semua ayam sudah mati, maka bulu bulu ayam tersebut akan dicabut hingga tak tersisa 1 helai pun. Jika terdapat 1 bulu yang tersisa, maka yang memotong akan dicabut nyawanya!",
+        "title": "Tidur Siang",
+        "description": "Tidur siang baik untuk kesehatan",
         "status": "New",
-        "due_date": "2021-05-24T08:00:00.112Z"
+        "due_date": "2021-05-04",
+        "user_id": 2
     },
     {
-        "title": "Menggoreng ayam",
-        "description": "Setelah semua ayam sudah dicabut bulunya, maka ayam akan langsung digoreng di minyak panas berusuhu 11 derajat fahrenheit",
+        "title": "Coding",
+        "description": "Melanjutkan coding challange dari instruktur",
+        "status": "Complete",
+        "due_date": "2020-05-18",
+        "user_id": 1
+    },
+    {
+        "title": "Push github",
+        "description": "Push coding terbaru ke github",
         "status": "New",
-        "due_date": "2021-05-24T08:00:00.112Z"
+        "due_date": "2020-05-25",
+        "user_id": 1
     }
 ]

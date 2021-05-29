@@ -9,21 +9,24 @@ const authenticateUser = (req, res, next) => {
         User.findByPk(id)
         .then(user => {
             if (!user) {
-                throw { name: 'UserNotAuthorized', message: 'Invalid credentials' }
+                throw { name: 'UserNotFound', data: {
+                    table: 'User',
+                    id
+                }}
             }
 
-            req.currentUser = { id: user.id }            
+            req.currentUser = { id: user.id }
             next()
         })
         .catch(err => {
-            const { name, message } = err
+            const { name, data } = err
 
-            if (name == 'UserNotAuthorized') return res.status(401).json({ message })
-
-            res.status(500).json(err)
+            next({ name, data })
         })
     } catch (error) {
-        res.status(401).json({ message: 'Invalid credentials' })
+        const { name } = error
+
+        next({ name })
     }
 }
 
@@ -36,22 +39,23 @@ const authorizeUser = (req, res, next) => {
     })
     .then((todo) => {
         if (!todo) {
-            throw { name: 'MovieNotFound', message: `Movie with id ${id} not found` }
+            throw { name: 'TodoNotFound', data: {
+                table: 'Todo',
+                id
+            }}
         }
 
         if (todo.user_id !== userId) {
-            throw { name: 'UserNotAuthorized', message: `You are not authorized` }
+            throw { name: 'Unauthorized' }
         }
+
+        req.currentUser.todo = todo
 
         next()
     }).catch((err) => {
-        const { name, message } = err
+        const { name, data } = err
 
-        if (name == 'MovieNotFound') return res.status(404).json({ message })
-
-        if (name == 'UserNotAuthorized') return res.status(401).json({ message })
-
-        res.status(500).json(err)
+        next({ name, data })
     });
 }
 

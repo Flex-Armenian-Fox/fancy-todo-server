@@ -3,51 +3,45 @@ const { comparePassword } = require('../helpers/bcrypt.js')
 const { generateToken } = require('../helpers/jwt.js')
 
 class Controller {
-    static registerUser(req, res, next) {
-        User.create({
-            email: req.body.email,
-            password: req.body.password
-        })
-        .then(user => {
+    static async registerUser(req, res, next) {
+        try {
+            const user = await User.create({
+                email: req.body.email,
+                password: req.body.password
+            })
             const { id, email, createdAt } = user
-
+    
             res.status(201).json({
                 message: 'User create successfully',
                 data: { id, email, createdAt }
-            })
-        })
-        .catch(err => {
+            })            
+        } catch (error) {
             const { name, message } = err
-
-            next({ name, message })
-        }) 
+            next({ name, message })            
+        } 
     }
 
-    static login(req, res, next) {
-        const { email, password } = req.body
-
-        User.findOne({
-            where: { email }
-        })
-        .then(user => {                        
+    static async login(req, res, next) {
+        try {
+            const user = await User.findOne({
+                where: { email: req.body.email }
+            })
+            
             if (!user) throw { name: 'LoginFailed' }
             
             const { id, email } = user
             const payload = { id, email }
-            const isValidPassword = comparePassword(password, user.password)
-
+            const isValidPassword = comparePassword(req.body.password, user.password)
+    
             if (!isValidPassword) throw { name: 'LoginFailed' }
-
+    
             const token = generateToken(payload)
-
+    
             res.status(200).json({ message: 'Login Success', access_token: token })
-        })
-        .catch(err => {    
-            const { name, message } = err
-
+        } catch (error) {
+            const { name, message } = error
             next({ name, message })
-
-        })
+        }
     }
 }
 

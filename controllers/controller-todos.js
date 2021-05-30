@@ -5,7 +5,10 @@ const {Todo} = require('../models')
 class ControllerTodo {
 
     static showAll (req, res) {
-        Todo.findAll({order: [['id', 'ASC']]})
+        Todo.findAll({
+            where: {UserId: req.currentUser.id},
+            order: [['id', 'ASC']]
+        })
             .then(todos => {
                 res.status(200).json(todos)
             })
@@ -17,8 +20,14 @@ class ControllerTodo {
     }
 
     static createNew (req, res) {
-        const {title, description, status, due_date} = req.body
-        Todo.create({title, description, status, due_date})
+        const input = {
+            title: req.body.title,
+            description: req.body.description,
+            status: req.body.status,
+            due_date: req.body.due_date,
+            UserId: req.currentUser.id
+        }
+        Todo.create(input)
             .then(newTodo => {
                 res.status(201).json({newTodo})
             })
@@ -29,6 +38,7 @@ class ControllerTodo {
 
     static showOne (req, res) {
         const todoId = +req.params.id
+        
         Todo.findByPk(todoId)
             .then(todo => {
                 if (todo === null) {
@@ -43,6 +53,10 @@ class ControllerTodo {
             .catch(err => {
                 if (err.name === 'Not Found') {
                     res.status(404).json({
+                        message: err.message
+                    })
+                } else if (err.name === 'Not Authorised') {
+                    res.status(401).json({
                         message: err.message
                     })
                 }

@@ -1,7 +1,7 @@
 'use strict'
 
 const jwt = require('jsonwebtoken')
-const secretKey = 'ubigoreng'
+const secretKey = process.env.JWT_SECRETKEY
 
 function generateToken (payload) {
     const generatedToken = jwt.sign(payload, secretKey)

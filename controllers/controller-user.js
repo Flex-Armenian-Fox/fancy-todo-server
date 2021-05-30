@@ -75,7 +75,7 @@ class ControllerUser {
                             email: result.email
                         })
                         res.status(200).json({
-                            accessToken: token
+                            accesstoken: token
                         })
                     }
                 }

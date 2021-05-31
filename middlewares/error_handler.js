@@ -9,7 +9,6 @@ class CustomError extends Error {
     static throwNewError(err, req, res, next) {        
         const { data, name } = err
         let errorMessage = 'Internal Server Error'
-        let httpstatus = 500
 
         switch (name) {
             case "LoginFailed":
@@ -20,20 +19,20 @@ class CustomError extends Error {
                 break            
             case "SequelizeValidationError":
             case "SequelizeUniqueConstraintError":
-                httpstatus = 400
+                err.httpstatus = 400
                 errorMessage = err.errors[0].message
                 break
             case "Unauthorized":
             case "JsonWebTokenError":
-                httpstatus = 401
+                err.httpstatus = 401
                 errorMessage = 'You are not authorized'
                 break
             default:
                 console.log("UncaughtError ", err)
-                httpstatus = 500
+                err.httpstatus = 500
                 break
         }
-        return res.status(httpstatus).json({ status: 'Error', name: name, message: errorMessage})
+        return res.status(err.httpstatus).json({ status: 'Error', name: name, message: errorMessage})
     }
 }
 

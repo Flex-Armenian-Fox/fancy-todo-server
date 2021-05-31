@@ -364,6 +364,9 @@ Menghapus data todo
   - **Code:** 500 INTERNAL SERVER ERROR <br />
 
 --- 
+
+## Users
+
 ### Register User
 
 Mendaftarkan User baru
@@ -393,7 +396,8 @@ Mendaftarkan User baru
 
     ```json
     {
-      "message": "User Registered"
+      "message": "User Registered",
+      "data": <email user>
     }
     ```
 

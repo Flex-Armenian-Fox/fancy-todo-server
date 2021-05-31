@@ -8,7 +8,7 @@ class Controller{
         if (!req.body.email || !req.body.password) throw {name: "FillEmailPassword"}
         User.create(req.body)
             .then(() => {
-                res.status(200).json({message: "User Registered", data:req.body})
+                res.status(200).json({message: "User Registered", data:req.body.email})
             })
             .catch((err) => {
                 next(err)

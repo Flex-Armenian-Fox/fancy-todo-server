@@ -1,6 +1,7 @@
 const { User } = require('../models')
 const { comparePassword } = require('../helpers/bcrypt.js')
 const { generateToken } = require('../helpers/jwt.js')
+const CustomError = require('../middlewares/error_handler.js')
 
 class Controller {
     static async registerUser(req, res, next) {
@@ -16,8 +17,7 @@ class Controller {
                 data: { id, email, createdAt }
             })            
         } catch (error) {
-            const { name, message } = err
-            next({ name, message })            
+            next(error)
         } 
     }
 
@@ -27,20 +27,19 @@ class Controller {
                 where: { email: req.body.email }
             })
             
-            if (!user) throw { name: 'LoginFailed' }
+            if (!user) throw new CustomError('LoginFailed', 400)
             
             const { id, email } = user
             const payload = { id, email }
             const isValidPassword = comparePassword(req.body.password, user.password)
     
-            if (!isValidPassword) throw { name: 'LoginFailed' }
+            if (!isValidPassword) throw new CustomError('LoginFailed', 400)
     
             const token = generateToken(payload)
     
             res.status(200).json({ message: 'Login Success', access_token: token })
         } catch (error) {
-            const { name, message } = error
-            next({ name, message })
+            next(error)
         }
     }
 }

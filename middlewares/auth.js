@@ -1,5 +1,6 @@
 const { verifyToken } = require('../helpers/jwt.js')
 const { User, Todo } = require('../models')
+const CustomError = require('./error_handler.js')
 
 const authenticateUser = async (req, res, next) => {
     try {
@@ -8,17 +9,16 @@ const authenticateUser = async (req, res, next) => {
         const user = await User.findByPk(id)
 
         if (!user) {
-            throw { 
-                name: 'UserNotFound', 
-                data: { table: 'User', id }
-            }
+            throw new CustomError('NotFound', 404, {
+                table: 'User',
+                id: id
+            })
         }
         
         req.currentUser = { id: user.id }
         next()
     } catch (error) {
-        const { name, data } = error
-        next({ name, data })
+        next(error)
     }
 }
 
@@ -31,20 +31,19 @@ const authorizeUser = async (req, res, next) => {
         })
         
         if (!todo) {
-            throw { 
-                name: 'TodoNotFound', 
-                data: { table: 'Todo', id }
-            }
+            throw new CustomError('NotFound', 404, {
+                table: 'Todo',
+                id: id
+            })
         }
 
-        if (todo.user_id !== userId) throw { name: 'Unauthorized' }
+        if (todo.user_id !== userId) throw new CustomError('Unauthorized')
     
         req.currentUser.todo = todo
     
         next()
     } catch (error) {
-        const { name, data } = error
-        next({ name, data })
+        next(error)
     }
 }
 

@@ -1,4 +1,5 @@
 const { Todo } = require('../models')
+const CustomError = require('../middlewares/error_handler.js')
 
 class Controller {
     static async getTodos(req, res, next) {
@@ -10,8 +11,7 @@ class Controller {
 
             res.status(200).json(todos)
         } catch (error) {
-            const { name, message } = error
-            next({ name, message })
+            next(error)
         }
     }
 
@@ -20,17 +20,16 @@ class Controller {
             const todoId = +req.params.id
             const todo = await Todo.findByPk(todoId) 
             
-            if (!todo) {
-                throw { 
-                    name: 'TodoNotFound', 
-                    data: { table: 'Todo', id: todoId }
-                }                
+            if (!todo) {                  
+                throw new CustomError('NotFound', 404, {
+                    table: 'Todo',
+                    id: todoId
+                })              
             }
     
             res.status(200).json(todo)
         } catch (error) {
-            const { name, message, data } = error
-            next({ name, message, data })
+            next(error)
         }
     }
 
@@ -45,8 +44,7 @@ class Controller {
                 data: newTodo
             })
         } catch (error) {
-            const { name, message } = error
-            next({ name, message })            
+            next(error)
         }
     }
 
@@ -66,8 +64,7 @@ class Controller {
                 data: newTodo[1][0]
             })
         } catch (error) {
-            const { name, message } =  error
-            next({ name, message }) 
+            next(error)
         }
     }
 
@@ -85,9 +82,8 @@ class Controller {
                 message: `Update success, ${newTodo[0]} row affected`,
                 data: newTodo[1][0]
             })
-        } catch (error) {
-            const { name, message } = error
-            next({ name, message })
+        } catch (error) {            
+            next(error)
         }
     }
 
@@ -103,9 +99,8 @@ class Controller {
                 message: 'todo success to delete',
                 data: deletedTodo
             })            
-        } catch (error) {
-            const { name, message } = error
-            next({ name, message })
+        } catch (error) {            
+            next(error)
         }
     }
 }

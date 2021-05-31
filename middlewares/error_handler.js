@@ -1,35 +1,39 @@
-const errorHandler = (err, req, res, next) => {
-    const { name, message, data } =  err
-    let statusCode = 500
-    let errMessage = "Internal server error"
-        
-    switch (name) {
-        case "JsonWebTokenError":
-        case "Unauthorized":
-            statusCode = 401
-            errMessage = 'You are not authorized'
-            break
-        case "LoginFailed":
-            statusCode = 401
-            errMessage = 'Invalid username or password'
-            break
-        case "UserNotFound":
-        case "TodoNotFound":
-            statusCode = 404
-            errMessage = `${data.table} with id ${data.id} not found`
-            break
-        case "SequelizeUniqueConstraintError":
-        case "SequelizeValidationError":
-            statusCode = 400
-            errMessage = message
-            break
-        default:
-            console.log('UncaughtError ===>',err)
-            errMessage = message
-            break;
+class CustomError extends Error {
+    constructor(name, httpstatus = 500, data, message) {
+        super(message)
+        this.name = name
+        this.data = data
+        this.httpstatus = httpstatus
     }
 
-    return res.status(statusCode).json({ name, message: errMessage })
+    static throwNewError(err, req, res, next) {        
+        const { data, name, httpstatus } = err
+        let errorMessage = 'Internal Server Error'
+
+        switch (name) {
+            case "LoginFailed":
+                errorMessage = 'Invalid username or password'
+                break
+            case "NotFound":
+                errorMessage = `${data.table} with id ${data.id} not found`
+                break            
+            case "SequelizeValidationError":
+            case "SequelizeUniqueConstraintError":
+                httpstatus = 400
+                errorMessage = err.errors[0].message
+                break
+            case "Unauthorized":
+            case "JsonWebTokenError":
+                httpstatus = 401
+                errorMessage = 'You are not authorized'
+                break
+            default:
+                console.log("UncaughtError ", err)
+                httpstatus = 500
+                break
+        }
+        return res.status(httpstatus).json({ status: 'Error', name: name, message: errorMessage})
+    }
 }
 
-module.exports = { errorHandler }
+module.exports = CustomError

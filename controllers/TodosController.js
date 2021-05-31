@@ -22,7 +22,7 @@ class TodosController{
     static toList(req, res){
         console.log(req.currentUser)
         todo.findAll({
-            where: {UserId: req.currentUser}
+            where: {UserId: req.currentUser.id}
         })
         .then(result => {
             res.status(200).json(result)
@@ -91,16 +91,32 @@ class TodosController{
     }
 
     static deleteData(req, res){
-        todo.destroy({
-            where: {
-                id: req.params.id
+        todo.findOne({
+            where: {id: req.params.id}
+        })
+        .then(result => {
+            if (!result) {
+                throw ({
+                    name: "NotFound",
+                    message: `Todo with Id ${req.params.id} Not Found`
+                })
+            } else {
+                return todo.destroy({
+                    where: {
+                        id: req.params.id
+                    }
+                })
             }
         })
         .then(() => {
             res.status(200).json({"message": "todo success to delete"})
         })
         .catch(err => {
-            res.status(500).json({"error": err})
+            if (err.name == "NotFound") {
+                res.status(404).json({"message": err.message})
+            } else {
+                res.status(500).json({"error": err})
+            }
         })
     }
 }

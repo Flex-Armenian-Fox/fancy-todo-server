@@ -1,5 +1,5 @@
 class CustomError extends Error {
-    constructor(name, httpstatus = 500, data, message) {
+    constructor(name, httpstatus, data, message) {
         super(message)
         this.name = name
         this.data = data
@@ -7,8 +7,9 @@ class CustomError extends Error {
     }
 
     static throwNewError(err, req, res, next) {        
-        const { data, name, httpstatus } = err
+        const { data, name } = err
         let errorMessage = 'Internal Server Error'
+        let httpstatus = 500
 
         switch (name) {
             case "LoginFailed":

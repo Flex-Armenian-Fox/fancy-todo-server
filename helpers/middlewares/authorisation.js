@@ -1,6 +1,6 @@
 'use strict'
 
-const { Todo } = require('../models')
+const { Todo } = require('../../models')
 
 function authorisation (req, res, next) {
     const todoId = +req.params.id

@@ -2,11 +2,11 @@
 
 const { User, Todo } = require('../models')
 const { comparePassword } = require('../helpers/bcrypt.js')
-const { generateToken, verifyToken } = require('../helpers/jwt.js')
+const { generateToken } = require('../helpers/jwt.js')
 
 class ControllerUser {
 
-    static register (req, res) {
+    static register (req, res, next) {
         const input = {
             email: req.body.email,
             password: req.body.password
@@ -29,23 +29,24 @@ class ControllerUser {
                 }
             })
             .catch(err => {
-                if (err.name === 'UniqueConstraintError') {
-                    res.status(409).json({
-                        message: err.message
-                    })
-                } else if (err.name = 'SequelizeValidationError') {
-                    res.status(400).json({
-                        message: err.errors[0].message
-                    })
-                } else {
-                    res.status(500).json({
-                        message: 'Internal Server Error'
-                    })
-                }
+                next(err)
+                // if (err.name === 'UniqueConstraintError') {
+                //     res.status(409).json({
+                //         message: err.message
+                //     })
+                // } else if (err.name = 'SequelizeValidationError') {
+                //     res.status(400).json({
+                //         message: err.errors[0].message
+                //     })
+                // } else {
+                //     res.status(500).json({
+                //         message: 'Internal Server Error'
+                //     })
+                // }
             })
     }
 
-    static login (req, res) {
+    static login (req, res, next) {
         const input = {
             email: req.body.email,
             password: req.body.password
@@ -54,12 +55,12 @@ class ControllerUser {
             where: {email: input.email}
         })
             .then(result => {
-                if (!result) { // ini kalau EMAIL: TIDAK DITEMUKAN
+                if (!result) { // kalau EMAIL: TIDAK DITEMUKAN
                     throw {
-                        name: 'Email not found',
+                        name: 'Not Found',
                         message: 'Email/Password incorrect'
                     }
-                } else { // ini kalau EMAIL: DITEMUKAN
+                } else { // kalau EMAIL: DITEMUKAN
                     // skrg COMPARE PASSWORDnya: TRUE / FALSE
                     const isPasswordValid = comparePassword(input.password, result.password)
 
@@ -81,15 +82,16 @@ class ControllerUser {
                 }
             })
             .catch(err => {
-                if (err.name === 'Email not found' || err.name === 'Login Fail') {
-                    res.status(404).json({
-                        message: err.message
-                    })
-                } else {
-                    res.status(500).json({
-                        message: 'Internal Server Error'
-                    })
-                }
+                next(err)
+                // if (err.name === 'Not found' || err.name === 'Login Fail') {
+                //     res.status(404).json({
+                //         message: err.message
+                //     })
+                // } else {
+                //     res.status(500).json({
+                //         message: 'Internal Server Error'
+                //     })
+                // }
             })
     }
 

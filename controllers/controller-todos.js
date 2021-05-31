@@ -4,7 +4,7 @@ const {Todo} = require('../models')
 
 class ControllerTodo {
 
-    static showAll (req, res) {
+    static showAll (req, res, next) {
         Todo.findAll({
             where: {UserId: req.currentUser.id},
             order: [['id', 'ASC']]
@@ -13,13 +13,14 @@ class ControllerTodo {
                 res.status(200).json(todos)
             })
             .catch(err => {
-                res.status(500).json({
-                    message: `Internal server error`
-                })
+                next(err)
+                // res.status(500).json({
+                //     message: `Internal server error`
+                // })
             })
     }
 
-    static createNew (req, res) {
+    static createNew (req, res, next) {
         const input = {
             title: req.body.title,
             description: req.body.description,
@@ -32,11 +33,11 @@ class ControllerTodo {
                 res.status(201).json({newTodo})
             })
             .catch(err => {
-                res.status(400).json(err.errors[0].message)
+                res.status(400).json(err.errors[0])
             })
     }
 
-    static showOne (req, res) {
+    static showOne (req, res, next) {
         const todoId = +req.params.id
         
         Todo.findByPk(todoId)
@@ -51,19 +52,21 @@ class ControllerTodo {
                 }
             })
             .catch(err => {
-                if (err.name === 'Not Found') {
-                    res.status(404).json({
-                        message: err.message
-                    })
-                } else if (err.name === 'Not Authorised') {
-                    res.status(401).json({
-                        message: err.message
-                    })
-                }
+                next(err)
+
+                // if (err.name === 'Not Found') {
+                //     res.status(404).json({
+                //         message: err.message
+                //     })
+                // } else if (err.name === 'Not Authorised') {
+                //     res.status(401).json({
+                //         message: err.message
+                //     })
+                // }
             })
     }
 
-    static putOne (req, res) {
+    static putOne (req, res, next) {
         const {title, description, status, due_date} = req.body
         const todoId = +req.params.id
         Todo.update({title, description, status, due_date}, {
@@ -97,7 +100,7 @@ class ControllerTodo {
             })
     }
 
-    static patchOne (req, res) {
+    static patchOne (req, res, next) {
         const todoId = +req.params.id
         const newStatus = req.body.status
         Todo.update({status: newStatus}, {
@@ -131,7 +134,7 @@ class ControllerTodo {
             })
     }
 
-    static deleteOne (req, res) {
+    static deleteOne (req, res, next) {
         const todoId = +req.params.id
         Todo.destroy({where: {id: todoId}})
             .then((deleted) => {
@@ -147,15 +150,17 @@ class ControllerTodo {
                 }
             })
             .catch(err => {
-                if (err.name === 'Not Found') {
-                    res.status(404).json({
-                        message: err.message
-                    })
-                } else {
-                    res.status(500).json({
-                        message: 'Internal server error'
-                    })
-                }
+                next(err)
+
+                // if (err.name === 'Not Found') {
+                //     res.status(404).json({
+                //         message: err.message
+                //     })
+                // } else {
+                //     res.status(500).json({
+                //         message: 'Internal server error'
+                //     })
+                // }
             })
     }
 

@@ -19,6 +19,7 @@ class TodosController{
     }
 
     static toList(req, res){
+        console.log(req.currentUser)
         todo.findAll()
         .then(result => {
             res.status(200).json(result)

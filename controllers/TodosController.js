@@ -5,6 +5,7 @@ const {todo} = require('../models/index.js');
 class TodosController{
     static createData(req, res){
         console.log(req.body)
+        req.body.UserId = req.currentUser.id
         todo.create(req.body)
         .then(result => {
             res.status(201).json(result)
@@ -20,7 +21,9 @@ class TodosController{
 
     static toList(req, res){
         console.log(req.currentUser)
-        todo.findAll()
+        todo.findAll({
+            where: {UserId: req.currentUser}
+        })
         .then(result => {
             res.status(200).json(result)
         })

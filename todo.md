@@ -417,6 +417,24 @@ Mendaftarkan User baru
 
     ```json
     {
+      "message": "Please use proper email format"
+    }
+    ```
+  
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:**
+
+    ```json
+    {
+      "message": "Password must be between 4 to 32 characters"
+    }
+    ```
+
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:**
+
+    ```json
+    {
       "message": "Email already taken"
     }
     ```

@@ -30,7 +30,10 @@ List of Endpoints:
               "title": "Menangkap ayam di kebun",
               "description": "Pergi ke kebun di pagi hari untuk menangkap ayam",
               "status": "New",
-              "due_date": "2021-05-24T00:56:21.112Z",
+              "due_date": {
+                "value": "2021-05-24T00:56:21.112Z",
+                "holiday": null
+              },
               "createdAt": "2021-05-24T13:42:39.759Z",
               "updatedAt": "2021-05-24T13:42:39.759Z"
           },
@@ -39,7 +42,18 @@ List of Endpoints:
               "title": "Memotong ayam, minimal 1000 ayam per jam",
               "description": "Setelah selesai ditangkap, ayam ayam tersebut dipotong",
               "status": "New",
-              "due_date": "2021-05-24T05:12:21.112Z",
+              "due_date": {
+                "value": "2021-06-01T05:12:21.112Z",
+                "holiday": {
+                  "id": 4,
+                  "holiday_name": "Pancasila Day",
+                  "holiday_date": "2021-06-01",
+                  "holiday_description": "Pancasila Day is a national holiday in Indonesia",
+                  "holiday_type": "National Holiday",
+                  "createdAt": "2021-06-01T12:20:18.119Z",
+                  "updatedAt": "2021-06-01T12:20:18.119Z"
+                }
+              },
               "createdAt": "2021-05-24T13:42:39.759Z",
               "updatedAt": "2021-05-24T13:42:39.759Z"
           }
@@ -64,7 +78,10 @@ List of Endpoints:
       "title": "Menangkap ayam di kebun",
       "description": "Pergi ke kebun di pagi hari untuk menangkap ayam",
       "status": "New",
-      "due_date": "2021-05-24T00:56:21.112Z",
+      "due_date": {
+        "value": "2021-05-24T00:56:21.112Z",
+        "holiday": null
+      },
       "createdAt": "2021-05-24T13:42:39.759Z",
       "updatedAt": "2021-05-24T13:42:39.759Z"
     }  

@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Todo.belongsTo(models.User, { foreignKey: 'user_id' })
+      Todo.belongsTo(models.Holiday, { foreignKey: 'holiday_id'} )
     }
   };
   Todo.init({
@@ -79,6 +80,9 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
+    holiday_id: {
+      type: DataTypes.INTEGER
+    },
     user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -92,7 +96,7 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'user_id must be in integer'
         }
       }
-    }
+    }    
   }, {
     sequelize,
     modelName: 'Todo',

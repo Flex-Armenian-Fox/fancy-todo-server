@@ -1,9 +1,24 @@
 # API Documentation: fancy-todo
 
-## **TODOS**
+## **TODOS / USERS**
 
-### **1.  SHOW ALL TODOs**
-Returns all todos that exist.
+| Method | Route            | Description                                            |
+| ------ | -----------------| ------------------------------------------------------ |
+| GET    | /todos           | Display all `Todo`                                     |
+| POST   | /todos           | Add a new `Todo`                                       |
+| GET    | /todos/:id       | Display a `Todo` based on its ID                       |
+| DEL    | /todos/:id       | Delete a `Todo` based on its ID                        |
+| PUT    | /todos/:id       | Update all fields/columns of a `Todo` based on its ID  |
+| PATCH  | /todos/:id       | Update the status field of `Todo` based on its ID      |
+| POST   | /users/register  | Register a new `User`                                  |
+| POST   | /users/login     | Login with a `User` credentials                        |
+
+<br>
+<br>
+*******************************************
+
+### **TODOS: SHOW ALL TODOs**
+Display all `Todo`s that exist.
 
 **URL**  `/todos`
 
@@ -62,9 +77,11 @@ Returns all todos that exist.
     }
 
   ```
+<br>
+*******************************************
 
-### **2.  CREATE 1 NEW TODO**
-Create one new todo and add it to the database.
+### **TODOS: CREATE 1 NEW TODO**
+Create one new `Todo` and add it to the database.
 
 **URL**  `/todos`
 
@@ -92,13 +109,14 @@ Create one new todo and add it to the database.
   ```json
     {
         "newTodo": {
-            "id": 4,
-            "title": "Follow up potential clients",
-            "description": "Prioritas yg deadline Juli 2021",
+            "id": 14,
+            "title": "Masak makan siang",
+            "description": "Udang sambel pete",
             "status": "ongoing",
-            "due_date": "2021-06-10T14:48:00.000Z",
-            "updatedAt": "2021-05-26T10:34:41.202Z",
-            "createdAt": "2021-05-26T10:34:41.202Z"
+            "due_date": "2021-06-29T14:48:00.000Z",
+            "UserId": 1,
+            "updatedAt": "2021-06-01T05:53:58.971Z",
+            "createdAt": "2021-06-01T05:53:58.971Z"
         }
     }
   ```
@@ -110,12 +128,36 @@ Create one new todo and add it to the database.
 
   ```json
 
-    "Due date cannot be empty"
+    {
+      "message": "Validation error: Due date must be today or after"
+    }
 
   ```
+- Code: `400`<br/>
+  Content:
 
-### **3.  FIND AND SHOW 1 TODO**
-Search and find, then display one particular todo.
+  ```json
+
+    {
+        "message": "Validation error: Title cannot be empty"
+    }
+
+  ```
+- Code: `400`<br/>
+  Content:
+
+  ```json
+
+    {
+        "message": "Validation error: Status cannot be empty,\nValidation error: Status must be \"ongoing\" or \"completed\""
+    }
+
+  ```
+<br>
+*******************************************
+
+### **TODOS: FIND AND SHOW 1 TODO**
+Search and find, then display one particular `Todo`.
 
 **URL**  `/todos/:id`
 
@@ -159,10 +201,31 @@ Required:
     }
 
   ```
+- Code: `401`<br/>
+  Content:
 
+  ```json
 
-### **4.  UPDATE ALL FIELDS FOR 1 TODO**
-Update values in all column fields for one particular todo.
+    {
+        "message": "User 1 does not have permission"
+    }
+
+  ```
+- Code: `500`<br/>
+  Content:
+
+  ```json
+
+    {
+        "message": "Internal server error"
+    }
+
+  ```
+<br>
+*******************************************
+
+### **TODOS: UPDATE ALL FIELDS FOR 1 TODO**
+Update values in all column fields for one particular `Todo`.
 
 **URL**  `/todos/:id`
 
@@ -223,7 +286,18 @@ Required:
   ```json
 
     {
-        "message": "Due date cannot be empty"
+        "message": "Validation error: Due date must be today or after"
+    }
+
+  ```
+
+- Code: `401`<br/>
+  Content:
+
+  ```json
+
+    {
+        "message": "User 1 does not have permission"
     }
 
   ```
@@ -238,9 +312,11 @@ Required:
     }
 
   ```
+<br>
+*******************************************
 
-### **5.  UPDATE SELECTIVE FIELDS FOR 1 TODO**
-Update values in some selected column fields for one particular todo.
+### **TODOS: UPDATE SELECTIVE FIELDS FOR 1 TODO**
+Update values in some selected column fields for one particular `Todo`.
 
 **URL**  `/todos/:id`
 
@@ -302,6 +378,17 @@ Required:
 
   ```
 
+- Code: `401`<br/>
+  Content:
+
+  ```json
+
+    {
+        "message": "User 1 does not have permission"
+    }
+
+  ```
+
 - Code: `500`<br/>
   Content:
 
@@ -312,9 +399,11 @@ Required:
     }
 
   ```
+<br>
+*******************************************
 
-### **6.  DELETE 1 TODO**
-Delete and remove one particular todo from the database.
+### **TODOS: DELETE 1 TODO**
+Delete and remove one particular `Todo` from the database.
 
 **URL**  `/todos/:id`
 
@@ -347,6 +436,148 @@ Required:
 
     {
         "message": "Todo with ID 22 does not exist"
+    }
+
+  ```
+
+- Code: `401`<br/>
+  Content:
+
+  ```json
+
+    {
+        "message": "User 1 does not have permission"
+    }
+
+  ```
+
+- Code: `500`<br/>
+  Content:
+
+  ```json
+
+    {
+        "message": "Internal server error"
+    }
+
+  ```
+<br>
+*******************************************
+
+### **USERS: REGISTER**
+Register a new `User`.
+
+**URL**  `/users/register`
+
+**Method**  `POST`
+
+**URL Params** none
+
+**Data Params**
+```json
+  {
+    "email": "<user email> required",
+    "password": "<user password> required"
+  }
+```
+
+**Success Response**
+
+- Code: `201`<br/>
+  Content:
+
+  ```json
+    {
+        "message": "New user successfully created",
+        "data": "user5@email.com"
+    }
+  ```
+
+**Error Response**
+
+- Code: `400`<br/>
+  Content:
+
+  ```json
+
+    {
+        "message": "Validation error: Must be a valid email address"
+    }
+
+  ```
+
+- Code: `400`<br/>
+  Content:
+
+  ```json
+
+    {
+        "message": "Validation error: Password cannot be less than 5 characters"
+    }
+
+  ```
+
+- Code: `409`<br/>
+  Content:
+
+  ```json
+
+    {
+        "message": "Email already registered"
+    }
+
+  ```
+
+- Code: `500`<br/>
+  Content:
+
+  ```json
+
+    {
+        "message": "Internal server error"
+    }
+
+  ```
+<br>
+*******************************************
+
+### **USERS: LOGIN**
+Login with a `User` credentials
+
+**URL**  `/users/login`
+
+**Method**  `POST`
+
+**URL Params** none
+
+**Data Params**
+```json
+  {
+    "email": "<user email> required",
+    "password": "<user password> required"
+  }
+```
+
+**Success Response**
+
+- Code: `200`<br/>
+  Content:
+
+  ```json
+    {
+        "accesstoken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1c2VyMUBlbWFpbC5jb20iLCJpYXQiOjE2MjI1MjY2NTB9.wIZYZt49eHzxRGmALETGwUZQgdvwdwurlyN664y1_nI"
+    }
+  ```
+
+**Error Response**
+
+- Code: `401`<br/>
+  Content:
+
+  ```json
+
+    {
+        "message": "Email/Password incorrect"
     }
 
   ```

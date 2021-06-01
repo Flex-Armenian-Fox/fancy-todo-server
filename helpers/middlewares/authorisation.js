@@ -4,11 +4,10 @@ const { Todo } = require('../../models')
 
 function authorisation (req, res, next) {
     const todoId = +req.params.id
-    console.log(todoId)
+
     Todo.findOne({where: {id: todoId}})
         .then(result => {
-            console.log('Masuk THEN !!!!')
-            console.log(result)
+
             if (!result) { // kalau NULL / falsy
                 throw {
                     name: 'Not Found',
@@ -27,8 +26,7 @@ function authorisation (req, res, next) {
             }
         })
         .catch(err => {
-            console.log('Masuk ERROR !!!!')
-            console.log(err)
+
             if (err.name === 'Not Found') { // handle jika ERROR: NULL -> todoID nya ga ada -> todo doesnt exist
                 res.status(404).json({
                     message: err.message

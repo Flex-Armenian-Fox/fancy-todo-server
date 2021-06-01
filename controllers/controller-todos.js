@@ -33,7 +33,8 @@ class ControllerTodo {
                 res.status(201).json({newTodo})
             })
             .catch(err => {
-                res.status(400).json(err.errors[0])
+                next(err)
+                
             })
     }
 
@@ -84,19 +85,21 @@ class ControllerTodo {
                 }
             })
             .catch(err => {
-                if (err.name === 'Not Found') {
-                    res.status(404).json({
-                        message: err.message
-                    })
-                } else if (err.errors[0].type === 'Validation error') {
-                    res.status(400).json({
-                        message: err.errors[0].message
-                    })
-                } else {
-                    res.status(500).json({
-                        message: 'Internal server error'
-                    })
-                }
+                next(err)
+
+                // if (err.name === 'Not Found') {
+                //     res.status(404).json({
+                //         message: err.message
+                //     })
+                // } else if (err.name === 'SequelizeValidationError') {
+                //     res.status(400).json({
+                //         message: err.errors[0].message
+                //     })
+                // } else {
+                //     res.status(500).json({
+                //         message: 'Internal server error'
+                //     })
+                // }
             })
     }
 
@@ -118,19 +121,21 @@ class ControllerTodo {
                 }
             })
             .catch(err => {
-                if (err.name === 'Not Found') {
-                    res.status(404).json({
-                        message: err.message
-                    })
-                } else if (err.errors[0].type === 'Validation error') {
-                    res.status(400).json({
-                        message: err.errors[0].message
-                    })
-                } else {
-                    res.status(500).json({
-                        message: 'Internal server error'
-                    })
-                }
+                next(err)
+
+                // if (err.name === 'Not Found') {
+                //     res.status(404).json({
+                //         message: err.message
+                //     })
+                // } else if (err.errors[0].type === 'Validation error') {
+                //     res.status(400).json({
+                //         message: err.errors[0].message
+                //     })
+                // } else {
+                //     res.status(500).json({
+                //         message: 'Internal server error'
+                //     })
+                // }
             })
     }
 

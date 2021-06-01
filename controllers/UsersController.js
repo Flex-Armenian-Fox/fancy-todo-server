@@ -4,7 +4,7 @@ const bcryptjs = require("bcryptjs")
 const { generateToken } = require('../helpers/jwt.js')
 
 class UsersController{
-    static register(req, res) {
+    static register(req, res, next) {
         users.create({
             email: req.body.email,
             password: req.body.password
@@ -15,13 +15,11 @@ class UsersController{
             })
         })
         .catch(err => {
-            res.status(500).json({
-                message: err,
-            })
+            next(err)
         })
     }
 
-    static login(req, res){
+    static login(req, res, next){
         users.findOne({
             where: {email: req.body.email}
         })
@@ -34,10 +32,8 @@ class UsersController{
                 }
             }
 
-            console.log("X")
             const checkPW = comparePassword(req.body.password, result.password)
 
-            console.log("CECK", checkPW)
             if (!checkPW){
                 throw {
                     name: "LoginError",
@@ -56,14 +52,15 @@ class UsersController{
             })
         })
         .catch(err => {
-            if (err.name = "LoginError")
-                return res.status(400).json({
-                    message: err
-                })
+            next(err)
+            // if (err.name = "LoginError")
+            //     return res.status(400).json({
+            //         message: "incorrect user email or password"
+            //     })
 
-            res.status(500).json({
-                message: err
-            })
+            // res.status(500).json({
+            //     message: err
+            // })
         })
     }
 }

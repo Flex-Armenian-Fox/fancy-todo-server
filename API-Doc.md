@@ -250,3 +250,76 @@
 
   * **Code:** 500 <br />
     **Content:** `{ error : "<error response>" }`
+
+
+## TODOS USERS
+**Register User**
+----
+  create a new data user and save it to database
+
+* **URL**
+
+  '/users'
+
+* **Method:**
+  
+  `POST`
+
+* **URL Params**
+* **Data Params**
+    ```json
+    {
+        "email": "<user email>",
+        "password": "<user password>"
+    }
+    ```
+* **Success Response:**
+  * **Code:** 201 <br />
+    **Content:** 
+    ```json
+    {
+        "message": "user created"
+    }
+    ```
+ 
+* **Error Response:**
+  * **Code:** 500 <br />
+    **Content:** `{ error : "<error response>" }`
+
+**Login User**
+----
+  Login user and get access_token
+
+* **URL**
+
+  '/users/login'
+
+* **Method:**
+  
+  `POST`
+
+* **URL Params**
+* **Data Params**
+    ```json
+    {
+        "email": "<user email>",
+        "password": "<user password>"
+    }
+    ```
+* **Success Response:**
+  * **Code:** 200 <br />
+    **Content:** 
+    ```json
+    {
+        "access_token": "<access token>"
+    }
+    ```
+ 
+* **Error Response:**
+  * **Code:** 400 <br />
+    **Content:** `{ message : "User Or Password Incorrect" }`
+
+ OR
+
+  * **Code:** 500 <br />
+    **Content:** `{ error : "<error response>" }`

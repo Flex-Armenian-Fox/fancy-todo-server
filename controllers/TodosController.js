@@ -3,7 +3,7 @@
 const {todo} = require('../models/index.js');
 
 class TodosController{
-    static createData(req, res){
+    static createData(req, res, next){
         console.log(req.body)
         req.body.UserId = req.currentUser.id
         todo.create(req.body)
@@ -11,15 +11,11 @@ class TodosController{
             res.status(201).json(result)
         })
         .catch(err => {
-            if (err.name == "SequelizeValidationError") {
-                res.status(400).json({"error": err.errors})
-            } else {
-                res.status(500).json({"error": err})
-            }
+            next(err)
         })   
     }
 
-    static toList(req, res){
+    static toList(req, res, next){
         console.log(req.currentUser)
         todo.findAll({
             where: {UserId: req.currentUser.id}
@@ -28,11 +24,11 @@ class TodosController{
             res.status(200).json(result)
         })
         .catch(err => {
-            res.status(500).json({"error": err})
+            next(err)
         })
     }
 
-    static getById(req, res){
+    static getById(req, res, next){
         todo.findOne({
             where: {id: req.params.id}
         })
@@ -40,11 +36,11 @@ class TodosController{
             res.status(200).json(result)
         })
         .catch(err => {
-            res.status(500).json({"error": err})
+            next(err)
         })
     }
 
-    static updateData(req, res){
+    static updateData(req, res, next){
         todo.update(req.body, {
             where: {
                 id: req.params.id
@@ -60,15 +56,11 @@ class TodosController{
             }
         })
         .catch(err => {
-            if (err.name == "SequelizeValidationError") {
-                res.status(400).json({"error": err.errors})
-            } else {
-                res.status(500).json({"error": err})
-            }
+            next(err)
         })
     }
 
-    static setStatus(req, res){
+    static setStatus(req, res, ext){
         console.log("A")
         todo.update(
             {status: req.body.status}, {
@@ -85,12 +77,11 @@ class TodosController{
             }
           })
           .catch(err => {
-              console.log(err)
-            res.status(500).json({"error": err})
+              next(err)
           })
     }
 
-    static deleteData(req, res){
+    static deleteData(req, res, next){
         todo.findOne({
             where: {id: req.params.id}
         })
@@ -112,11 +103,7 @@ class TodosController{
             res.status(200).json({"message": "todo success to delete"})
         })
         .catch(err => {
-            if (err.name == "NotFound") {
-                res.status(404).json({"message": err.message})
-            } else {
-                res.status(500).json({"error": err})
-            }
+            next(err)
         })
     }
 }

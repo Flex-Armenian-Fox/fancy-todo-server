@@ -66,9 +66,10 @@ const authorizationTodo = (req, res, next) => {
         }
     })
     .catch(err => {
-        res.status(401).json({
-            message: err || "not authorized"
-        })
+        next(err)
+        // res.status(401).json({
+        //     message: err || "not authorized"
+        // })
     })
 }
 

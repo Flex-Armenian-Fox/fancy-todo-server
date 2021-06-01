@@ -492,7 +492,16 @@ Login user
 
     ```json
     {
-      "message": "Login Error, Please Try Again"
+      "message": "No Email"
+    }
+    ```
+
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:**
+
+    ```json
+    {
+      "message": "Wrong Password"
     }
     ```
 

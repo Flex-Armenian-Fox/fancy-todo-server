@@ -3,9 +3,14 @@ const errorHandler = (err, req, res, next) => {
     let message
     console.log(err)
     switch (err.name) {
-        case "LoginError":
+        case "noEmail":
             statusCode = 400
-            message = "Login Error, Please Try Again"
+            message = "Email not found"
+            break;
+
+        case "wrongPassword":
+            statusCode = 400
+            message = "Wrong password"
             break;
         
         case "SequelizeUniqueConstraintError":

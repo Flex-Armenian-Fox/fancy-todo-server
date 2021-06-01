@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notBefore(date){
           console.log("test")
-          if (date < new Date()) throw "Date must be after today"
+          if (date < new Date().toDateString()) throw "Date must be after today" 
         }
       }
     },

@@ -13,7 +13,8 @@ class Controller{
     }
 
     static getTodo(req, res, next){
-      Todo.findAll()
+      console.log(req.currentUser)
+      Todo.findAll({where:{user_id: req.currentUser.id}})
         .then(result =>{
             res.status(200).json({data: result})
         })
@@ -27,11 +28,11 @@ class Controller{
     static putTodo(req, res, next){
       let id = req.params.id
       let data = req.body
-      data.user_id = req.currentUser.id
       Todo.update(data, {where:{id:id}, returning:true})
         .then(result => {
+          console.log(result)
           if (result[0] == 0){
-              throw{name: "TodoNotFound"}
+              throw {name: "TodoNotFound"}
           }
           else{
               res.status(200).json({message:"put complete", data:result[1]})
@@ -42,9 +43,10 @@ class Controller{
 
     static patchTodo(req, res, next){
       let id = req.params.id
-      let data = req.body.status
+      let data = req.body
       Todo.update(data, {where:{id:id}, returning:true})
       .then(result => {
+        console.log(result)
         if (result[0] == 0){
             throw {name: "TodoNotFound"}
         }

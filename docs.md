@@ -36,10 +36,7 @@ Create new user account to access Fancy Todo
       "success": true,
       "user": {
         "id": "<user ID>",
-        "email": "<user email>",
-        "password": "<user password (hashed)>",
-        "updatedAt": "2021-05-28T14:25:42.534Z",
-        "createdAt": "2021-05-28T14:25:42.534Z"
+        "email": "<user email>"
       }
     },
     ```
@@ -48,6 +45,26 @@ Create new user account to access Fancy Todo
 
   - **Code:** 400 BAD REQUEST <br />
     **Content:** `"message": "Email <user email> is already registered"`
+
+    OR
+
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:** `"message": "Email cannot be empty/null"`
+
+    OR
+
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:** `"message": "Email format is wrong"`
+
+    OR
+
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:** `"message": "Password cannot be empty/null"`
+
+    OR
+
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:** `"message": "Password minimum character is 6"`
 
     OR
 
@@ -60,7 +77,7 @@ Create new user account to access Fancy Todo
 
   ```json
   {
-    "email": "user1",
+    "email": "user1@mail.com",
     "password": "password1"
   }
   ```
@@ -72,10 +89,7 @@ Create new user account to access Fancy Todo
     "success": true,
     "user": {
       "id": 14,
-      "email": "user1",
-      "password": "$2a$04$2qYosC8tAcGdA3GIDjnetevO44Rcp8gDmuQ/eUjvLwnfbWM.ySCnG",
-      "updatedAt": "2021-05-28T14:28:31.503Z",
-      "createdAt": "2021-05-28T14:28:31.503Z"
+      "email": "user1"
     }
   }
   ```

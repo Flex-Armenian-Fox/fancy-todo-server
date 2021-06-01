@@ -50,7 +50,9 @@ class Controller {
 
     todo
       .save()
-      .then(() => res.status(200).json({ success: true, data: todo }))
+      .then((updatedTodo) =>
+        res.status(200).json({ success: true, data: updatedTodo })
+      )
       .catch((err) => next(err));
   }
 

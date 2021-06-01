@@ -14,7 +14,7 @@ const errorHandler = (err, req, res, next) => {
       break;
     case 'SequelizeValidationError':
       statusCode = 400;
-      errorMsg = err.message;
+      errorMsg = err.errors[0].message || err.message;
       break;
     case 'LoginError':
       statusCode = 403;

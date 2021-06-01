@@ -6,6 +6,7 @@
 | ------ | -----------------| ------------------------------------------------------ |
 | GET    | /todos           | Display all `Todo`                                     |
 | POST   | /todos           | Add a new `Todo`                                       |
+| GET    | /todos/weather   | Show today's weather in Jakarta                        |
 | GET    | /todos/:id       | Display a `Todo` based on its ID                       |
 | DEL    | /todos/:id       | Delete a `Todo` based on its ID                        |
 | PUT    | /todos/:id       | Update all fields/columns of a `Todo` based on its ID  |
@@ -150,6 +151,64 @@ Create one new `Todo` and add it to the database.
 
     {
         "message": "Validation error: Status cannot be empty,\nValidation error: Status must be \"ongoing\" or \"completed\""
+    }
+
+  ```
+<br>
+*******************************************
+
+### **TODOS: WEATHER**
+Show today's weather.
+
+**URL**  `/todos/weather`
+
+**Method**  `GET`
+
+**URL Params** none
+
+**Data Params** none
+
+**Success Response**
+
+- Code: `200`<br/>
+  Content:
+
+  ```json
+    {
+        "city": "Jakarta",
+        "date": "2021-06-01",
+        "weather": [
+            {
+                "id": 721,
+                "main": "Haze",
+                "description": "kabut asap",
+                "icon": "50n"
+            }
+        ],
+        "actual_temperature": "27.67°C",
+        "feels_like": "31.84°C"
+    }
+  ```
+
+**Error Response**
+- Code: `401`<br/>
+  Content:
+
+  ```json
+
+    {
+        "cod": 401,
+        "message": "Invalid API key. Please see http://openweathermap.org/faq#error401 for more info."
+    }
+
+  ```
+- Code: `500`<br/>
+  Content:
+
+  ```json
+
+    {
+        "message": "Internal Server Error"
     }
 
   ```
@@ -592,3 +651,4 @@ Login with a `User` credentials
     }
 
   ```
+<br>

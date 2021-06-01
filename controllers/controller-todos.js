@@ -1,8 +1,34 @@
 'use strict'
 
+const axios = require('axios')
 const {Todo} = require('../models')
+const getToday = require('../helpers/today.js')
 
 class ControllerTodo {
+
+    static getWeather (req, res, next) {
+        axios.get('https://api.openweathermap.org/data/2.5/weather', {
+            params: {
+              q: 'Jakarta',
+              appid: process.env.OPENWEATHER_APIKEY,
+              units: 'metric',
+              lang: 'id'
+            }
+          })
+          .then(response => {
+    
+            res.status(200).json({
+                city: response.data.name,
+                date: getToday(new Date()),
+                weather: response.data.weather,
+                actual_temperature: `${response.data.main.temp}°C`,
+                feels_like: `${response.data.main.feels_like}°C`,
+            })
+          })
+          .catch(err => {
+              next(err)
+          })
+    }
 
     static showAll (req, res, next) {
         Todo.findAll({

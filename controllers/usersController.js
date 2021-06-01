@@ -6,14 +6,18 @@ const privateKey = process.env.PRIVATE_KEY;
 class Controller {
   static register(req, res, next) {
     User.create(req.body)
-      .then((user) => res.status(201).json({ success: true, user: user }))
+      .then((user) =>
+        res
+          .status(201)
+          .json({ success: true, user: { id: user.id, email: user.email } })
+      )
       .catch((err) => next(err));
   }
 
   static login(req, res, next) {
     User.findOne({
       where: {
-        email: req.body.email,
+        email: req.body.email.toLowerCase(),
       },
     })
       .then((user) => {

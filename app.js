@@ -4,6 +4,9 @@ const app = express()
 const PORT = 3000
 const router = require('./routes')
 const CustomError = require('./middlewares/error_handler.js')
+const cors = require('cors')
+
+app.use(cors())
 
 app.use(express.urlencoded({ extended: true }))
 

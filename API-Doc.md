@@ -323,3 +323,32 @@
 
   * **Code:** 500 <br />
     **Content:** `{ error : "<error response>" }`
+
+
+## GET DATA COVID
+**Get Data Covid World**
+----
+  Get information about covid data in the world
+
+* **URL**
+
+  '/covid'
+
+* **Method:**
+  
+  `GET`
+
+* **URL Params**
+* **Data Params**
+* **Success Response:**
+  * **Code:** 201 <br />
+    **Content:** 
+    ```json
+    {
+        "data": "{data covid world}"
+    }
+    ```
+ 
+* **Error Response:**
+  * **Code:** 500 <br />
+    **Content:** `{ error : "<error response>" }`

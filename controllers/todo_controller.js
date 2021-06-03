@@ -9,7 +9,8 @@ class Controller {
             const userId = req.currentUser.id
             const todos = await Todo.findAll({
                 where: { user_id: userId },
-                include: [Holiday]
+                include: [Holiday],
+                order: [['id', 'asc']]
             })
 
             todos.map(el => {

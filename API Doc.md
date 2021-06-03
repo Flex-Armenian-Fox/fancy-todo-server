@@ -61,7 +61,14 @@ List of Endpoints:
      ```
 - **Error response** :
     - **Response Code** : `500`
-    - **Content** : `Internal Server Error`
+    - **Content** : 
+        ```json
+        {
+          "status": "Error",
+          "name": "Internal Server Error",
+          "message": "Internal Server Error"
+        }
+        ```
 ----------
 
 ### Menampilkan Todo By Id
@@ -91,11 +98,20 @@ List of Endpoints:
     - **Content** :
       ```json
       {
-          "message": "Todo with id <id> not found"
+         "status": "Error",
+         "name": "NotFound",
+         "message": "Todo with id <id> not found"
       }
       ```
     - **Response Code** : `500`
-    - **Content** : `Internal Server Error`
+    - **Content** :
+       ```json
+       {
+         "status": "Error",
+         "name": "Internal Server Error",
+         "message": "Internal Server Error"
+       }
+       ```
 
 ----------
 ### Membuat todo baru
@@ -132,12 +148,21 @@ List of Endpoints:
     - **Response Code** : `400`
     - **Content** :
       ```json
-      {
-          "message": "max attribute due_date is today"
+      {        
+        "status": "Error",
+        "name": "SequelizeValidationError",
+        "message": "max attribute due_date is today"
       }
       ```
     - **Response Code** : `500`
-    - **Content** : `Internal Server Error`
+    - **Content** :
+       ```json
+      {        
+        "status": "Error",
+        "name": "Internal Server Error",
+        "message": "Internal Server Error"
+      }
+      ```
 ----------
 ### Mengupdate kolom title, description, status, due_date berdasarkan param **id** yang dikirim
 - **URL** : `/todos/:id`
@@ -174,18 +199,29 @@ List of Endpoints:
     - **Content** :
       ```json
       {
-          "message": "max attribute due_date is today"
+        "status": "Error",
+        "name": "SequelizeValidationError",
+        "message": "max attribute due_date is today"
       }
       ```
     - **Response Code** : `404`
     - **Content** :
       ```json
-      {
-          "message": "Todo with id <id> was not found"
+      {        
+        "status": "Error",
+        "name": "NotFound",
+        "message": "Todo with id <id> was not found"
       }
       ```
     - **Response Code** : `500`
-    - **Content** : `Internal Server Error`
+    - **Content** :
+      ```json
+      {        
+        "status": "Error",
+        "name": "Internal Server Error",
+        "message": "Internal Server Error"
+      }
+      ```
 
 ----------
 ### Mengupdate kolom status berdasarkan param **id** yang dikirim
@@ -219,19 +255,30 @@ List of Endpoints:
     - **Response Code** : `400`
     - **Content** :
       ```json
-      {
-          "message": "max attribute due_date is today"
+      {        
+        "status": "Error",
+        "name": "SequelizeValidationError",
+        "message": "max attribute due_date is today"      
       }
       ```
     - **Response Code** : `404`
     - **Content** :
       ```json
-      {
-          "message": "Todo with id <id> was not found"
+      {          
+        "status": "Error",
+        "name": "NotFound",
+        "message": "Todo with id <id> was not found"
       }
       ```
     - **Response Code** : `500`
-    - **Content** : `Internal Server Error`
+    - **Content** :
+      ```json
+      {          
+        "status": "Error",
+        "name": "Internal Server Error",
+        "message": "Internal Server Error"
+      }
+      ```
 
 ----------
 ### Menghapus todo berdasarkan param **id** yang dikirim
@@ -261,11 +308,20 @@ List of Endpoints:
     - **Content** :
       ```json
       {
-          "message": "Todo with id <id> was not found"
+        "status": "Error",
+        "name": "NotFound",
+        "message": "Todo with id <id> was not found"      
       }
       ```
     - **Response Code** : `500`
-    - **Content** : `Internal Server Error`
+    - **Content** : 
+       ```json
+      {          
+        "status": "Error",
+        "name": "Internal Server Error",
+        "message": "Internal Server Error"
+      }
+       ```
 
 ----------
 ### Register user baru
@@ -297,11 +353,20 @@ List of Endpoints:
     - **Content** :
       ```json
       {
-          "message": "Please provide field username or password"
+        "status": "Error",
+        "name": "SequelizeValidationError",
+        "message": "Wrong email format"
       }
       ```
     - **Response Code** : `500`
-    - **Content** : `Internal Server Error`
+    - **Content** :
+      ```json
+      {
+        "status": "Error",
+        "name": "Internal Server Error",
+        "message": "Internal Server Error"
+      }
+      ```
 
 ----------
 ### Melakukan proses login
@@ -329,15 +394,26 @@ List of Endpoints:
     - **Content** :
       ```json
       {
-          "message": "Please provide field username or password"
+        "status": "Error",
+        "name": "SequelizeValidationError",
+        "message": "Please provide field username or password"
       }
       ```
     - **Response Code** : `401`
     - **Content** :
       ```json
       {
-          "message": "invalid credentials"
+        "status": "Error",
+        "name": "JSONWebTokenError",
+        "message": "invalid credentials"
       }
       ```
     - **Response Code** : `500`
     - **Content** : `Internal Server Error`
+      ```json
+      {
+        "status": "Error",
+        "name": "Internal Server Error",
+        "message": "Internal Server Error"
+      }
+      ```

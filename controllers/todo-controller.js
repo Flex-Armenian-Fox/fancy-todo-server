@@ -13,8 +13,10 @@ class Controller{
     }
 
     static getTodo(req, res, next){
-      console.log(req.currentUser)
-      Todo.findAll({where:{user_id: req.currentUser.id}})
+      Todo.findAll({
+        where:{user_id: req.currentUser.id}, 
+        order:[[`due_date`, `ASC`]]
+      })
         .then(result =>{
             res.status(200).json({data: result})
         })

@@ -12,17 +12,14 @@ class Controller {
       due_date,
       UserId: req.userId,
     })
-      .then((result) =>
-        res.status(201).json({ message: 'created', data: result })
-      )
+      .then((result) => res.status(201).json({ message: 'created', data: result }))
       .catch((err) => next(err));
   }
 
   static getAll(req, res, next) {
-    Todo.findAll({ where: { UserId: req.userId }, order: [`id`] })
+    Todo.findAll({ where: { UserId: req.userId }, order: [['status', 'desc'], ['due_date']] })
       .then((result) => {
-        if (result.length > 0)
-          res.status(200).json({ success: true, data: result });
+        if (result.length > 0) res.status(200).json({ success: true, data: result });
         throw {
           name: 'NotFound',
           message: 'Todo not found',
@@ -52,9 +49,7 @@ class Controller {
 
     todo
       .save()
-      .then((updatedTodo) =>
-        res.status(200).json({ success: true, data: updatedTodo })
-      )
+      .then((updatedTodo) => res.status(200).json({ success: true, data: updatedTodo }))
       .catch((err) => next(err));
   }
 
@@ -90,11 +85,7 @@ class Controller {
           const exportedData = result.map((el) => el.dataValues);
           console.log(exportedData);
           const xls = json2xls(exportedData);
-          fs.writeFileSync(
-            `public/export/data-${req.userId}.xlsx`,
-            xls,
-            'binary'
-          );
+          fs.writeFileSync(`public/export/data-${req.userId}.xlsx`, xls, 'binary');
           res.status(200).json({ success: true, data: result });
         } else
           throw {

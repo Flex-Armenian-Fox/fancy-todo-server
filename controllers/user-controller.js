@@ -1,7 +1,9 @@
 const { User, Todo } = require('../models/index')
 const {jwtEncrypt, jwtDecrypt} = require('../helpers/jwt')
-const user = require('../models/user')
 const {compareHash} = require('../helpers/brcypt')
+const GCLIENTID = process.env.DEV_G_CLIENT_ID
+const {OAuth2Client} = require('google-auth-library');
+const client = new OAuth2Client(GCLIENTID);
 
 class Controller{
     static postRegister(req, res, next){
@@ -29,6 +31,31 @@ class Controller{
             .catch((err) =>{
                 next(err)
             })
+    }
+
+    static postGAuth(req, res, next){
+        let gEmail = ""
+        client.verifyIdToken({
+            idToken: req.body.token,
+            audience: GCLIENTID
+        }).then(token =>{
+            let payload = token.getPayload()
+            gEmail = payload.email
+            return User.findOne({where:{email:gEmail}})
+        }) 
+        .then(user => {
+            if (!user) {
+                let randPass = String(Math.random())
+                return User.create({email: gEmail, password: randPass}, {returning:true})
+            } else return user
+        })
+        .then(user => {
+            const token = jwtEncrypt({id: user.id, email: user.email})
+            res.status(200).json({message: "login successful", access_token: token})
+        })
+        .catch(err => {
+            next(err)
+        })   
     }
 }
 

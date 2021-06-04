@@ -303,7 +303,7 @@ Mengubah data status
   
   - **Code:** 500 INTERNAL SERVER ERROR <br />
 
-  ---
+---
 ### Delete Todos
 
 Menghapus data todo
@@ -505,4 +505,40 @@ Login user
     }
     ```
 
+  - **Code:** 500 INTERNAL SERVER ERROR <br />
+--- 
+### Login Google
+
+Login google
+
+- **URL**
+
+  `/users/gauth`
+
+- **Method:**
+
+  `POST`
+
+- **Url Param:** none
+- **Body:**
+
+  ```json
+  {
+    "token": <google token>
+  }
+  ```
+
+- **Success Response:**
+
+  - **Code:** 200 <br />
+    **Content:**
+
+    ```json
+    {
+      "message": "Login Success",
+      "access_token": <access token>
+    }
+    ```
+
+- **Error Response:**
   - **Code:** 500 INTERNAL SERVER ERROR <br />

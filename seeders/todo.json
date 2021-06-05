@@ -1,0 +1,37 @@
+[
+    {
+        "title": "Menonton Anime",
+        "description": "Menonton Anime One Piece",
+        "status": "New",
+        "due_date": "2020-05-01",
+        "user_id": 1
+    },
+    {
+        "title": "Bermain Game",
+        "description": "Bermain game resident evil 8",
+        "status": "Process",
+        "due_date": "2021-05-01",
+        "user_id": 4
+    },
+    {
+        "title": "Tidur Siang",
+        "description": "Tidur siang baik untuk kesehatan",
+        "status": "New",
+        "due_date": "2021-05-04",
+        "user_id": 2
+    },
+    {
+        "title": "Coding",
+        "description": "Melanjutkan coding challange dari instruktur",
+        "status": "Complete",
+        "due_date": "2020-05-18",
+        "user_id": 1
+    },
+    {
+        "title": "Push github",
+        "description": "Push coding terbaru ke github",
+        "status": "New",
+        "due_date": "2020-05-25",
+        "user_id": 1
+    }
+]

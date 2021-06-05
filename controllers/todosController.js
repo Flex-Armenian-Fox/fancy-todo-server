@@ -4,11 +4,11 @@ const fs = require('fs');
 
 class Controller {
   static add(req, res, next) {
-    const { title, description, status, due_date } = req.body;
+    const { title, description, due_date } = req.body;
     Todo.create({
       title,
       description,
-      status,
+      status: 'undone',
       due_date,
       UserId: req.userId,
     })
@@ -19,11 +19,11 @@ class Controller {
   static getAll(req, res, next) {
     Todo.findAll({ where: { UserId: req.userId }, order: [['status', 'desc'], ['due_date']] })
       .then((result) => {
-        if (result.length > 0) res.status(200).json({ success: true, data: result });
-        throw {
-          name: 'NotFound',
-          message: 'Todo not found',
-        };
+        res.status(200).json({ success: true, data: result });
+        // throw {
+        //   name: 'NotFound',
+        //   message: 'Todo not found',
+        // };
       })
       .catch((err) => next(err));
   }
@@ -83,10 +83,11 @@ class Controller {
       .then((result) => {
         if (result.length > 0) {
           const exportedData = result.map((el) => el.dataValues);
-          console.log(exportedData);
           const xls = json2xls(exportedData);
-          fs.writeFileSync(`public/export/data-${req.userId}.xlsx`, xls, 'binary');
-          res.status(200).json({ success: true, data: result });
+          const path = `public/export/data-${req.userId}.xlsx`;
+          fs.writeFileSync(path, xls, 'binary');
+          res.download(path);
+          // res.status(200).json({ success: true, data: result });
         } else
           throw {
             name: 'NotFound',

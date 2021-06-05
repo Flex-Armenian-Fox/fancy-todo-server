@@ -1,16 +1,14 @@
 const { User } = require(`../models`);
 const { compareHash } = require('../helpers/bcrypt');
 const jwt = require('jsonwebtoken');
+const { OAuth2Client } = require('google-auth-library');
 const privateKey = process.env.PRIVATE_KEY;
+const CLIENT_ID = process.env.CLIENT_ID;
 
 class Controller {
   static register(req, res, next) {
     User.create(req.body)
-      .then((user) =>
-        res
-          .status(201)
-          .json({ success: true, user: { id: user.id, email: user.email } })
-      )
+      .then((user) => res.status(201).json({ success: true, user: { id: user.id, email: user.email } }))
       .catch((err) => next(err));
   }
 
@@ -39,6 +37,40 @@ class Controller {
         }
       })
       .catch((err) => next(err));
+  }
+
+  static googleLogin(req, res, next) {
+    const client = new OAuth2Client(CLIENT_ID);
+    const token = req.body.token;
+    async function verify() {
+      const ticket = await client.verifyIdToken({
+        idToken: token,
+        audience: CLIENT_ID, // Specify the CLIENT_ID of the app that accesses the backend
+        // Or, if multiple clients access the backend:
+        //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+      });
+      const payload = ticket.getPayload();
+      const userid = payload['sub'];
+      // If request specified a G Suite domain:
+      // const domain = payload['hd'];
+      User.findOne({ where: { email: payload.email } })
+        .then((user) => {
+          if (!user) {
+            return User.create({
+              email: payload.email,
+              password: Math.random().toString().substring(10),
+            });
+          } else {
+            return user;
+          }
+        })
+        .then((user) => {
+          const access_token = jwt.sign({ id: user.id }, privateKey);
+          res.status(201).json({ success: true, access_token });
+        })
+        .catch((err) => next(err));
+    }
+    verify().catch(console.error);
   }
 }
 

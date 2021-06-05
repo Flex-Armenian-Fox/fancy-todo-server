@@ -33,7 +33,7 @@ class ControllerTodo {
     static showAll (req, res, next) {
         Todo.findAll({
             where: {UserId: req.currentUser.id},
-            order: [['id', 'ASC']]
+            order: [['due_date', 'ASC']]
         })
             .then(todos => {
                 res.status(200).json(todos)
@@ -60,7 +60,6 @@ class ControllerTodo {
             })
             .catch(err => {
                 next(err)
-                
             })
     }
 

@@ -4,6 +4,7 @@ class CustomError extends Error {
         this.name = name
         this.data = data
         this.httpstatus = httpstatus
+        this.message = message
     }
 
     static throwNewError(err, req, res, next) {        
@@ -30,6 +31,7 @@ class CustomError extends Error {
             default:
                 console.log("UncaughtError ", err)
                 err.httpstatus = 500
+                errorMessage = err.message
                 break
         }
         return res.status(err.httpstatus).json({ status: 'Error', name: name, message: errorMessage})

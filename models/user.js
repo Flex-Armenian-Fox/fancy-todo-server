@@ -55,7 +55,8 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Password must atleast 6 characters long'
         }
       }
-    }
+    },
+    register_via: DataTypes.STRING
   }, {
     hooks: {
       beforeCreate: (user) => {

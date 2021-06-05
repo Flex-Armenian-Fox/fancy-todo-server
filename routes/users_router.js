@@ -5,4 +5,8 @@ router.post('/register', UserController.registerUser)
 
 router.post('/login', UserController.login)
 
+router.post('/google-login', UserController.googleLogin)
+
+router.post('/facebook-login', UserController.facebookLogin)
+
 module.exports = router

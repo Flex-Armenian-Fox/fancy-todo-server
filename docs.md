@@ -1,5 +1,18 @@
 # Fancy Todos API Documentation
 
+| Method | Route           | Description                                  |
+| :----- | :-------------- | :------------------------------------------- |
+| POST   | /users/register | Create new user account to access Fancy Todo |
+| POST   | /users/login    | User login to access Fancy Todo              |
+| POST   | /todos          | Add new todo to Fancy Todo                   |
+| GET    | /todos          | Show all todos in Fancy Todo                 |
+| GET    | /todos/:id      | Show todo in Fancy Todo by ID                |
+| PUT    | /todos/:id      | Update all todo field in Fancy Todo          |
+| PATCH  | /todos/:id      | Update only todo status field in Fancy Todo  |
+| DELETE | /todos/:id      | Delete todo from Fancy Todo                  |
+
+---
+
 ## Register
 
 Create new user account to access Fancy Todo
@@ -323,7 +336,7 @@ Show todo in Fancy Todo by ID
 
 - **URL**
 
-  `/todos`
+  `/todos/:id`
 
 - **Method:**
 
@@ -331,7 +344,7 @@ Show todo in Fancy Todo by ID
 
 - **URL Params**
 
-  `/todos/:id`
+  `/:id`
 
   **Required:**
 
@@ -370,7 +383,7 @@ Update all todo field in Fancy Todo
 
 - **URL**
 
-  `/todos`
+  `/todos/:id`
 
 - **Method:**
 
@@ -378,7 +391,7 @@ Update all todo field in Fancy Todo
 
 - **URL Params**
 
-  `/todos/:id`
+  `/:id`
 
   **Required:**
 
@@ -440,7 +453,7 @@ Update only todo status field in Fancy Todo
 
 - **URL**
 
-  `/todos`
+  `/todos/:id`
 
 - **Method:**
 
@@ -448,7 +461,7 @@ Update only todo status field in Fancy Todo
 
 - **URL Params**
 
-  `/todos/:id`
+  `/:id`
 
   **Required:**
 
@@ -507,7 +520,7 @@ Delete todo from Fancy Todo
 
 - **URL**
 
-  `/todos`
+  `/todos/:id`
 
 - **Method:**
 
@@ -515,7 +528,7 @@ Delete todo from Fancy Todo
 
 - **URL Params**
 
-  `/todos/:id`
+  `/:id`
 
   **Required:**
 

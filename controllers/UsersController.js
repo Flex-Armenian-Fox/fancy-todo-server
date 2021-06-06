@@ -2,6 +2,7 @@ const { comparePassword } = require('../helpers/bycrpt.js')
 const {users} = require('../models/index.js')
 const bcryptjs = require("bcryptjs")
 const { generateToken } = require('../helpers/jwt.js')
+const {OAuth2Client} = require('google-auth-library');
 
 class UsersController{
     static register(req, res, next) {
@@ -19,7 +20,51 @@ class UsersController{
         })
     }
 
+    static loginGoogle(req, res, next){
+        const client = new OAuth2Client(process.env.CLIENT_ID);
+        const {id_token_google } =req.body;
+        let emailUser = "";
+
+        client.verifyIdToken({
+            idToken: id_token_google,
+            audience: process.env.CLIENT_ID
+        })
+        .then(ticket => {
+            const payload = ticket.getPayload();
+            const {email} = payload
+            emailUser = email;
+
+            return users.findOne({
+                where: {email: emailUser}
+            })
+        }).then(user => {
+            if (!user) {
+                console.log("create user")
+                return users.create({
+                    email: emailUser,
+                    password: String(Math.random()) + String(Math.random())
+                })
+            } else {
+                console.log("DONE user")
+                return {
+                    id: user.id,
+                    email: user.email
+                }
+            }
+        })
+        .then(user => {
+            console.log("user ==>", user)
+            const token = generateToken({
+                id: user.id,
+                email: user.email
+            })
+
+            res.status(201).json({access_token: token})
+        })
+    }
+
     static login(req, res, next){
+        console.log(req)
         users.findOne({
             where: {email: req.body.email}
         })

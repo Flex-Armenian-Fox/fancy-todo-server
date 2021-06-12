@@ -7,6 +7,7 @@ router.use(authentication);
 
 router.post('/', Controller.add);
 router.get('/', Controller.getAll);
+router.get('/export', Controller.export);
 
 // router level middleware
 router.get('/:id', todosAuthorization, Controller.getById);

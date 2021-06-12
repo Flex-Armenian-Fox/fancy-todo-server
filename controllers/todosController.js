@@ -1,4 +1,6 @@
 const { Todo } = require('../models');
+const json2xls = require('json2xls');
+const fs = require('fs');
 
 class Controller {
   static add(req, res, next) {
@@ -18,6 +20,10 @@ class Controller {
     Todo.findAll({ where: { UserId: req.userId }, order: [['status', 'desc'], ['due_date']] })
       .then((result) => {
         res.status(200).json({ success: true, data: result });
+        // throw {
+        //   name: 'NotFound',
+        //   message: 'Todo not found',
+        // };
       })
       .catch((err) => next(err));
   }
@@ -68,6 +74,25 @@ class Controller {
           message: 'delete todo success',
           deletedData: req.todo,
         });
+      })
+      .catch((err) => next(err));
+  }
+
+  static export(req, res, next) {
+    Todo.findAll({ where: { UserId: req.userId }, order: [`id`] })
+      .then((result) => {
+        if (result.length > 0) {
+          const exportedData = result.map((el) => el.dataValues);
+          const xls = json2xls(exportedData);
+          const path = `public/export/data-${req.userId}.xlsx`;
+          fs.writeFileSync(path, xls, 'binary');
+          res.download(path);
+          // res.status(200).json({ success: true, data: result });
+        } else
+          throw {
+            name: 'NotFound',
+            message: 'Todo not found',
+          };
       })
       .catch((err) => next(err));
   }
